@@ -1,0 +1,45 @@
+{
+  "name": "@wya/vue-cli",
+  "version": "2.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**",
+    "src/**",
+    "bin/**"
+  ],
+  "scripts": {
+    "test": "mocha ./__tests__/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wya-team/vue-env.next"
+  },
+  "keywords": [],
+  "author": "wya-team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wya-team/vue-env.next/issues"
+  },
+  "homepage": "https://github.com/wya-team/vue-env.next#readme",
+  "dependencies": {
+    "@wya/toolkit-utils": "^1.0.0",
+    "cac": "^6.5.6",
+    "chalk": "^3.0.0",
+    "chokidar": "^3.3.1",
+    "del": "^5.1.0",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.6",
+    "upath": "^1.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "esm": "^3.2.25",
+    "mocha": "^7.0.1"
+  },
+  "bin": {
+    "wya-vue": "bin/cli",
+    "wya-v3": "bin/cli"
+  },
+  "bin-info": "区分基于vue@2.x的@wya/vue的版本，新增wya-v3"
+}

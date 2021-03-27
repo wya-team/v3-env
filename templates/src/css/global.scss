@@ -1,0 +1,7 @@
+@import "./themes/variables.scss";
+@import "./themes/index.scss";
+@import "./mixins/index.scss";
+
+// 基础样式
+@import "@wya/sass/lib/core/basic/index.scss";
+@import "./resets/index.scss";
