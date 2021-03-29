@@ -10,7 +10,7 @@
     "clean": "rm -rf ./node_modules/.cache ./node_modules/.vite ./dist",
     "copy": "echo 'end'",
     "prompt": "node ./build/script/prompt.js",
-    "lint": "esw src/pages --ext .vue,.js,.jsx --color",
+    "lint": "esw src/pages build config --ext .vue,.js,.jsx --color",
     "lint:fix": "npm run lint -- --fix",
     "lint:watch": "npm run lint -- --watch --fix",
     "lint:style": "stylelint --fix 'src/**/*.{vue,css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
@@ -68,7 +68,7 @@
     }
   },
   "lint-staged": {
-    "{src,config}/**/*.{js,jsx,vue}": [
+    "{src,config,build}/**/*.{js,jsx,vue}": [
       "esw --ext '.vue,.js,.jsx' --fix",
       "git add"
     ],

@@ -10,5 +10,4 @@ export default () => {
 		gzipSize: true,
 		brotliSize: true,
 	});
-	return [];
-}
+};

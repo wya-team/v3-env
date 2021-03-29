@@ -6,7 +6,7 @@ import { resolve } from 'path';
  */
 const nms = [
 	resolve(__dirname, '../node_modules'),
-	resolve(process.cwd(), './node_modules'),
+	resolve(process.cwd(), './node_modules')
 	// ...module.paths
 ];
 
@@ -25,12 +25,12 @@ export const resolvePackage = (source, options) => {
 
 export const isDev = (value) => {
 	return value === 'development';
-}
+};
 
 export const isProd = (value) => {
 	return value === 'production';
-}
+};
 
 export const isBuild = (value) => {
 	return value === 'build';
-}
+};

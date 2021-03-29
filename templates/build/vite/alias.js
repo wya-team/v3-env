@@ -10,4 +10,4 @@ export const createAlias = (target) => {
 			replacement: resolve(__dirname, '.', target[alia]),
 		};
 	});
-}
+};

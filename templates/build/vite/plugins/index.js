@@ -8,15 +8,15 @@ export const createPlugins = (options) => {
 
 	const plugins = [
 		vue(),
-		vueJsx(),
+		vueJsx()
 	];
 	
 	if (COMMAND_IS_BUILD) {
 		plugins.push(
 			// 包文件量分析
 			visualizer()
-		)
+		);
 	}
 	
 	return plugins;
-}
+};

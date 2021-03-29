@@ -1,8 +1,8 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 
 import { resolvePackage, isDev } from './build/utils';
 import { createAlias, createPlugins } from './build/vite';
@@ -43,5 +43,5 @@ export default (options) => {
 			outDir: 'dist',
 			assetsDir: `static.${TIMESTAMP}`
 		}
-	})
-}
+	});
+};
