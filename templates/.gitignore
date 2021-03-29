@@ -37,6 +37,7 @@ Thumbs.db
 
 # others
 tests/coverage
+.stylelintcache
 
 # error
 yarn-error.log

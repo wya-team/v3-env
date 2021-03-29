@@ -13,8 +13,9 @@
     "lint": "esw src/pages --ext .vue,.js,.jsx --color",
     "lint:fix": "npm run lint -- --fix",
     "lint:watch": "npm run lint -- --watch --fix",
-    "lint:style": "stylelint --fix \"src/**/*.{vue,css,scss}\" --cache",
+    "lint:style": "stylelint --fix 'src/**/*.{vue,css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
     "all": "cross-env NODE_ENV=development npm-run-all --parallel --race --continue-on-error lint:watch serve",
+    "test": "echo 'todo'",
     "add": "wya-v3 add",
     "create": "wya-v3 add --config ./config/modules.config.js"
   },
