@@ -1,5 +1,6 @@
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
+import legacy from '@vitejs/plugin-legacy';
 import visualizer from './visualizer';
 import { isBuild } from '../../utils';
 
@@ -14,9 +15,10 @@ export const createPlugins = (options) => {
 	if (COMMAND_IS_BUILD) {
 		plugins.push(
 			// 包文件量分析
-			visualizer()
+			visualizer(),
+			// 兼容低版本
+			legacy()
 		);
 	}
-	
 	return plugins;
 };
