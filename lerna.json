@@ -1,5 +1,8 @@
 {
   "useWorkspaces": true,
+  "workspaces": [
+      "packages/*"
+  ],
   "npmClient": "yarn",
   "command": {
     "publish": {
@@ -7,6 +10,7 @@
       "message": "chore(release): publish"
     },
     "bootstrap": {
+      "nohoist": ["@wya/vue-scaffold"],
       "npmClientArgs": ["--no-package-lock"]
     }
   },

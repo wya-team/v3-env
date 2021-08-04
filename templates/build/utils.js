@@ -6,11 +6,11 @@ import { resolve } from 'path';
  */
 const nms = [
 	resolve(__dirname, '../node_modules'),
-	resolve(process.cwd(), './node_modules')
-	// ...module.paths
+	resolve(process.cwd(), './node_modules'),
+	...module.paths
 ];
 
-export const resolvePackage = (source, options) => {
+export const resolvePackage = (source, options = {}) => {
 	let $path = nms.find(i => fs.pathExistsSync(resolve(i, source)));
 
 	if (!$path) {

@@ -20,7 +20,9 @@ export default (options) => {
 
 		resolve: {
 			alias: createAlias({
-				'@assets': './src/assets'
+				'@assets': './src/assets',
+				// 统一vue
+				'^vue$': resolvePackage('vue/index.js')
 			})
 		},
 
