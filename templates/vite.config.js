@@ -21,6 +21,11 @@ export default (options) => {
 		resolve: {
 			alias: createAlias({
 				'@assets': './src/assets',
+				'@globals': './src/pages/globals',
+				'@components': './src/pages/components',
+				'@constants': './src/pages/constants',
+				'@utils': './src/pages/utils',
+				'@hooks': './src/pages/hooks',
 				// 统一vue
 				'^vue$': resolvePackage('vue/index.js')
 			})
@@ -42,6 +47,10 @@ export default (options) => {
 		build: {
 			outDir: 'dist',
 			assetsDir: `static.${TIMESTAMP}`
+		},
+
+		define: {
+			'process.env.BRANCH': process.env.BRANCH || '"develop"'
 		}
 	});
 };
