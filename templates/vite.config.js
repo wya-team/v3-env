@@ -16,16 +16,16 @@ export default (options) => {
 		 * publicDir: 同webpack copy文件夹内的静态资源
 		 */
 		base: ENV_IS_DEV ? '/' : '/',
-		publicDir: 'src/static',
+		publicDir: 'src/assets/static',
 
 		resolve: {
 			alias: createAlias({
 				'@assets': './src/assets',
-				'@globals': './src/pages/globals',
-				'@components': './src/pages/components',
-				'@constants': './src/pages/constants',
-				'@utils': './src/pages/utils',
-				'@hooks': './src/pages/hooks',
+				'@globals': './src/globals',
+				'@components': './src/components',
+				'@constants': './src/constants',
+				'@utils': './src/utils',
+				'@hooks': './src/hooks',
 				// 统一vue
 				'^vue$': resolvePackage('vue/index.js')
 			})
