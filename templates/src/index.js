@@ -24,6 +24,8 @@ router.beforeEach(Hooks.beforeEach);
 router.afterEach(Hooks.afterEach);
 app.use(router);
 
+
+console.log('WYA_VC', WYA_VC);
 // VC配置
 app.use(WYA_VC, Vc.configure());
 

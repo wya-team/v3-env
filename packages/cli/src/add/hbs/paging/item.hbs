@@ -1,0 +1,138 @@
+<template>
+	{{#if isTableMode}}
+	<vc-table-item>
+		{{#if isMultiple}}
+		<vc-table-column type="selection" width="64" />
+		{{/if}}
+		<vc-table-column
+			prop="orders_id"
+			label="ID"
+			width="180"
+		/>
+		<vc-table-column
+			prop="status"
+			label="状态"
+			width="180"
+		>
+			<template #default="{ row }">
+				<div>
+					{{{{support-block-helper}}}}
+					{{ row.status === 1 ? '开启1' : '关闭' }}
+					{{{{/support-block-helper}}}}
+				</div>
+			</template>
+		</vc-table-column>
+		<vc-table-column
+			prop="orders_sn"
+			label="信息"
+			width="180"
+		/>
+		<vc-table-column
+			label="操作"
+			fixed="right"
+			header-align="right"
+			align="right"
+		>
+			<div @click="handleResetFirst">回到首页刷新</div>
+			<div @click="handleResetCur">当前页刷新</div>
+		</vc-table-column>
+	</vc-table-item>
+	{{/if}}
+	{{#if isPieceMode}}
+	<div :key="it.id" class="{{className}}">
+		<div>{{{{support-block-helper}}}}{{ it.title }}{{{{/support-block-helper}}}}</div>
+		<div @click="handleResetFirst">回到首页刷新</div>
+		<div @click="handleResetCur">当前页刷新</div>
+	</div>
+	{{/if}}
+	{{#if isNativeMode}}
+	<tbody>
+		<template v-for="item in dataSource">
+			<vc-fragment :key="item.id">
+				<tr>
+					<td colspan="4">
+						{{{{support-block-helper}}}}
+						{{ item.name }}
+						{{{{/support-block-helper}}}}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="_table-cell">
+							111
+						</div>
+					</td>
+					<td rowspan="2">
+						<div class="_table-cell">
+							222
+						</div>
+					</td>
+					<td>
+						<div class="_table-cell">
+							333
+						</div>
+					</td>
+					<td rowspan="2">
+						<div class="_table-cell">
+							444
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="_table-cell" @click="handleResetFirst">
+							回到首页刷新
+						</div>
+					</td>
+					<td>
+						<div class="_table-cell" @click="handleResetCur">
+							当前页刷新
+						</div>
+					</td>
+				</tr>
+			</vc-fragment>
+		</template>
+	</tbody>
+	{{/if}}
+</template>
+
+<script>
+{{#if isNativeMode}}
+import { Fragment } from 'wya-vc';
+
+{{/if}}
+export default {
+	name: '{{componentName}}',
+	components: {
+		{{#if isNativeMode}}
+		'vc-fragment': Fragment
+		{{/if}}
+	},
+	props: {
+		{{#if isNativeMode}}
+		dataSource: {
+			type: Array,
+			default: () => ([])
+		},
+		{{/if}}
+	},
+	data() {
+		return {
+		};
+	},
+	methods: {
+		handleResetFirst() {
+			this.$store.commit('{{mutationPrefix}}_LIST_INIT');
+		},
+		handleResetCur() {
+			this.$store.commit('{{mutationPrefix}}_LIST_RESET', { type: this.type });
+		},
+	},
+};
+</script>
+
+<style lang="scss">
+.{{className}} {
+
+}
+</style>

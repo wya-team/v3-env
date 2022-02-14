@@ -30,16 +30,6 @@ import { Global } from '@globals';
 
 export default {
 	name: 'tpl-layout',
-	beforeRouteEnter(to, from, next) {
-		next();
-	},
-	beforeRouteUpdate(to, from, next) {
-		// this.$vc.clear();
-		next();
-	},
-	beforeRouteLeave(to, from, next) {
-		next();
-	},
 	setup(props, context) {
 		// data
 		let paddingTop = ref(0);

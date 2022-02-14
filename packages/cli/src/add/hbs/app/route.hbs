@@ -1,0 +1,21 @@
+export default {
+	path: '{{path}}',
+	name: '{{pathName}}',
+	title: '{{title}}',
+	{{#if components}}
+	components: [
+		() => import('./{{childName}}/index.vue'),
+		{{#each components}}
+		'{{this}}',
+		{{/each}}
+	]
+	{{else if isNav}}
+	components: [
+		() => import('./{{childName}}/index.vue'),
+		'left',
+		'top'
+	]
+	{{else}}
+	component: () => import('./{{childName}}/index.vue'),
+	{{/if}}
+}

@@ -35,7 +35,7 @@ export default {
 			return `/${routeArray[1]}`;
 		});
 		const topMenus = computed(() => {
-			return findTopMenu(navManage.navTreeData);
+			return findTopMenu(navManage.navTreeData); // eslint-disable-line
 		});
 
 		// methods
