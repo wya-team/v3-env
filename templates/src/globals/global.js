@@ -1,9 +1,11 @@
 import { Storage, Cookie } from '@wya/utils';
+import { EventStore } from '@wya/ps';
 import { TOKEN_TAG, BRANCH_TAG } from '../constants';
 import { Network } from './network';
 
-class GlobalManager {
+class GlobalManager extends EventStore {
 	constructor() {
+		super();
 		// 版本号
 		this.version = '1.0';
 		this.branch = process.env.BRANCH || 'master';
@@ -33,7 +35,8 @@ class GlobalManager {
 	 */
 	isLoggedIn() {
 		const user = Storage.get(TOKEN_TAG);
-		return !!user;
+		// return !!user; // TODO: 对接好登录后可删除
+		return true;
 	}
 
 	/**

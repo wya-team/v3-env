@@ -52,6 +52,7 @@ module.exports = {
 			}
 		}],
 		"vue/require-default-prop": 0, // 可以不传递props
+		"vue/component-definition-name-casing": 0,
 		"vue/name-property-casing": ["warn", "kebab-case"],
 		// airbnb 
 		"comma-dangle": ["warn", {

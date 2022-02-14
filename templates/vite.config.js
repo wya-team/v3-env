@@ -24,6 +24,7 @@ export default (options) => {
 				'@globals': './src/globals',
 				'@components': './src/components',
 				'@constants': './src/constants',
+				'@modules': './src/modules',
 				'@utils': './src/utils',
 				'@hooks': './src/hooks',
 				// 统一vue
@@ -50,7 +51,8 @@ export default (options) => {
 		},
 
 		define: {
-			'process.env.BRANCH': process.env.BRANCH || '"develop"'
+			'process.env.BRANCH': process.env.BRANCH || '"develop"',
+			__DEV__: ENV_IS_DEV
 		}
 	});
 };

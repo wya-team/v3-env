@@ -2,23 +2,29 @@ import './assets/css/global.scss';
 import "@wya/vc/lib/vc.min.css";
 
 import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter } from 'vue-router';
 import * as WYA_VC from '@wya/vc';
 import { Global, Vc } from './globals';
 
 import App from './app.vue';
-import { routes, Hooks } from './routers';
+import { history, Hooks, RoutesManager, scrollBehavior } from './routers';
 
-let history = createWebHistory('/');
+let app = createApp(App);
+
+// 全局信息
+app.use(Global);
+
+// 路由
+const routesManager = new RoutesManager();
 let router = createRouter({
 	history,
-	routes
+	routes: routesManager.routes,
 });
 router.beforeEach(Hooks.beforeEach);
 router.afterEach(Hooks.afterEach);
-let app = createApp(App);
-app.use(Global);
 app.use(router);
+
+// VC配置
 app.use(WYA_VC, Vc.configure());
 
 app.mount('#app');
