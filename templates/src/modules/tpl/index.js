@@ -25,19 +25,14 @@ export const tplNavConfig = {
 			'top'
 		]
 	}, {
-		path: "/tpl/paging",
-		name: "tpl-paging",
-		title: "",
-		children: [{
-			path: '/tpl/paging/form',
-			name: 'tpl-paging-form',
-			title: '',
-			components: [
-				() => import('./paging-form/index.vue'),
-				'left',
-				'top'
-			]
-		}]
+		path: '/tpl/paging/form',
+		name: 'tpl-paging-form',
+		title: '表单',
+		components: [
+			() => import('./paging-form/index.vue'),
+			'left',
+			'top'
+		]
 	}]
 };
 
