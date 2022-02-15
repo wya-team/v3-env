@@ -155,11 +155,13 @@ class RoutesManager {
 					title: route.title,
 					...route.meta,
 				},
-				components: {
-					default: route.components[0],
-					left: route.components.includes('left') && Left,
-					top: route.components.includes('top') && Top,
-				}
+				// 不能接收false了
+				components: (() => {
+					const comps = { default: route.components[0] };
+					if (route.components.includes('left')) comps.left = Left;
+					if (route.components.includes('top')) comps.top = Top;
+					return comps;
+				})()
 			};
 	}
 }
