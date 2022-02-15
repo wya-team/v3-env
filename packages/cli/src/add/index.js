@@ -45,10 +45,17 @@ module.exports = class AddManager {
 				default: false
 			},
 			{
-				type: 'confirm',
+				type: 'list',
 				name: 'navigation',
-				message: 'is navigation route:',
-				default: false
+				message: 'is navigation route & select nav level:',
+				choices: [
+					new Separator(' = For template = '),
+					0,
+					1,
+					2,
+					3
+				],
+				default: 0
 			},
 			{
 				type: 'list',
