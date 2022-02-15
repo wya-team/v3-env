@@ -67,7 +67,7 @@ module.exports = (opts) => {
 	const createTemplate = {
 		basic: createBasic,
 		form: createForm,
-		paging: createPaging,
+		// paging: createPaging,
 		// scroll: createScroll,
 	};
 

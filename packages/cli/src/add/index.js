@@ -125,9 +125,9 @@ module.exports = class AddManager {
 				name: 'dir',
 				message: 'Where to in the project:',
 				when: (answers) => answers.type !== 'none',
-				default: (answers) => upath.normalize(`${process.cwd()}/src/pages/`),
+				default: (answers) => upath.normalize(`${process.cwd()}/src/`),
 				// default: upath.normalize(`${process.cwd()}/tmp/`),
-				// default: upath.normalize(`${process.cwd()}/tmp/src/pages/`),
+				// default: upath.normalize(`${process.cwd()}/tmp/src/`),
 				validate(val) {
 					if (val === `${process.cwd()}/tmp/`) {
 						// shell.rm('-rf', 'tmp');
@@ -169,15 +169,15 @@ module.exports = class AddManager {
 		// TODO: 检查是否存在stages和未unstages的文件
 		this.options.config
 			? this._loopMake()
-			// : prompt(this._getQuesion()).then(createProcess);
-			: createProcess({
-				project: 'chyy',
-				mobile: false,
-				navigation: true,
-				template: 'form',
-				path: '/tpl/paging/form',
-				dir: '/Users/dongjiang/Documents/workspace/gitClone/work/vue-env.next/templates/src/'
-			});
+			: prompt(this._getQuesion()).then(createProcess);
+		// : createProcess({
+		// 	project: 'chyy',
+		// 	mobile: false,
+		// 	navigation: true,
+		// 	template: 'form',
+		// 	path: '/tpl/paging/form',
+		// 	dir: '/Users/dongjiang/Documents/workspace/gitClone/work/vue-env.next/templates/src/'
+		// });
 	}
 };
 
