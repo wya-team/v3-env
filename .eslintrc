@@ -33,6 +33,12 @@
 			}
 		}
 	},
+	"globals": {
+		"_global": "readonly",
+		"defineProps": "readonly",
+		"defineEmits": "readonly",
+		"defineExpose": "readonly"
+	},
 	"rules":
 	{
 		// vue https://github.com/vuejs/eslint-plugin-vue

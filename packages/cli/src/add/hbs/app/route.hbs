@@ -9,13 +9,16 @@ export default {
 		'{{this}}',
 		{{/each}}
 	]
-	{{else if isNav}}
+	{{else if navLevel}}
 	components: [
 		() => import('./{{childName}}/index.vue'),
 		'left',
 		'top'
 	]
 	{{else}}
-	component: () => import('./{{childName}}/index.vue'),
+	components: [
+		() => import('./{{childName}}/index.vue'),
+		'left'
+	]
 	{{/if}}
 }

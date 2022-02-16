@@ -4,13 +4,13 @@ import { tplConfig } from '../modules/tpl';
 
 export const history = createWebHistory('/');
 export const basicRoutes = [
+	...loginConfig,
 	{
-		path: '/',
-		redirect: () => {
-			return '/tpl/main';
+		path: '/:pathMatch(.*)*',
+		redirect: (to) => {
+			return '/login';
 		}
-	},
-	...loginConfig
+	}
 ];
 
 // 开放式路由（未登录），但可以共享Layout组件

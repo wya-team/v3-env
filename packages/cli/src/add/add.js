@@ -42,7 +42,7 @@ module.exports = (opts) => {
 		components,
 		force,
 		mobile = false,
-		navigation: isNav
+		navigation: navLevel
 	} = opts;
 	const hasStore = store;
 	let pathArr = path.replace(/\({0,}\//g, '-')
@@ -84,11 +84,11 @@ module.exports = (opts) => {
 			pagingFeature
 		});
 		
-		createApp({ dir, project, path, components, template, title, pathArr, isNav, vcPrefix });
+		createApp({ dir, project, path, components, template, title, pathArr, navLevel, vcPrefix });
 		createApi({ dir, template, pathArr, pagingFeature });
 
 		// PC 端需要插入到layout的nav-config
-		if (isNav && !isMobile) {
+		if (navLevel && !isMobile) {
 			createLayout({ dir, template, pathArr });
 		}
 		if (hasStore) {

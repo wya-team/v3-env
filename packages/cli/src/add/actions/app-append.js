@@ -38,7 +38,7 @@ const getSecondNav = (children, route) => {
  * @param {*} fragment 插入的代码片段
  */
 module.exports = (source, fragment, opts) => {
-	const { isNav, moduleName } = opts || {};
+	const { navLevel, moduleName } = opts || {};
 	const sourceAST = recast.parse(source, parserConfig);
 	const fragmentAST = recast.parse(fragment, parserConfig);
 	const normalVarName = `${moduleName}Config`;
@@ -47,12 +47,11 @@ module.exports = (source, fragment, opts) => {
 	recast.visit(sourceAST, {
 		visitVariableDeclarator(path) {
 			const node = path.node;
-			if (!isNav && node.id.name === normalVarName) {
+			if (!navLevel && node.id.name === normalVarName) {
 				node.init.elements.push(fragmentObjExpression);
 				return this.abort(); // 停止遍历
-			} else if (isNav && node.id.name === navVarName) {
+			} else if (navLevel && node.id.name === navVarName) {
 				const routePath = fragmentObjExpression.properties.find((it) => it.key.name === 'path').value.value;
-				let navLevel = routePath.split('/').length - 1;
 				
 				if (navLevel <= 1) {
 					node.init = fragmentObjExpression; // 替换掉
