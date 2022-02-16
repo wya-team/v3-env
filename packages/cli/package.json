@@ -1,6 +1,6 @@
 {
   "name": "@wya/vue-cli",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.2",
   "description": "",
   "main": "dist/index.js",
   "files": [
@@ -29,10 +29,10 @@
     "chokidar": "^3.3.1",
     "del": "^5.1.0",
     "fs-extra": "^8.1.0",
+    "handlebars": "^4.7.7",
     "inquirer": "^7.0.6",
-    "upath": "^1.2.0",
     "recast": "^0.20.4",
-    "handlebars": "^4.7.7"
+    "upath": "^1.2.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
