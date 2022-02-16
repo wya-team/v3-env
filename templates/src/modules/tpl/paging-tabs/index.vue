@@ -5,7 +5,7 @@
 			:history="true"
 			:router="true"
 			:footer="true"
-			:filters="filters"
+			:filter-options="filterOptions"
 			:load-data="loadData"
 		>
 			<vc-tabs 
@@ -21,6 +21,7 @@
 					:name="item.value"
 				>
 					<vcc-paging
+						v-model:current="current[item.value]"
 						:disabled="item.value != type" 
 						:table-options="tableOptions"
 						style="width: 100%;"
@@ -49,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, getCurrentInstance } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { Tabs, Table } from '@wya/vc';
 import { URL } from '@wya/utils';
@@ -78,6 +79,7 @@ const tabs = ref([
 	{ label: '标签三', value: '3' }
 ]);
 
+const current = reactive({});
 const tableOptions = reactive({
 	defaultSort: {
 		prop: 'date',
@@ -85,53 +87,57 @@ const tableOptions = reactive({
 	}
 });
 
-const filters = ref([
-	{
-		type: 'input',
-		label: '关键词',
-		field: 'input',
-		placeholder: '请输入关键词进行搜索'
-	},
-	{
-		type: 'select',
-		label: '下拉选择项',
-		field: 'select',
-		dataSource: [
-			{ label: '选项一', value: 1 },
-			{ label: '选项二', value: 2 }
-		]
-	},
-	{
-		type: 'cascader',
-		label: '级联选择',
-		field: 'cascader',
-		dataSource: [
-			{ label: '选项一', value: 1 },
-			{ label: '选项二', value: 2 },
-			{ 
-				label: '选项三',
-				value: 3,
-				children: [
-					{ label: '选项三 - 1', value: 31 },
-					{ label: '选项三 - 2', value: 32 }    
-				]
-			}
-		]
-	}
-]);
+const filterOptions = reactive({
+	modules: [
+		{
+			type: 'input',
+			label: '关键词',
+			field: 'input',
+			placeholder: '请输入关键词进行搜索'
+		},
+		{
+			type: 'select',
+			label: '下拉选择项',
+			field: 'select',
+			dataSource: [
+				{ label: '选项一', value: 1 },
+				{ label: '选项二', value: 2 }
+			]
+		},
+		{
+			type: 'cascader',
+			label: '级联选择',
+			field: 'cascader',
+			dataSource: [
+				{ label: '选项一', value: 1 },
+				{ label: '选项二', value: 2 },
+				{ 
+					label: '选项三',
+					value: 3,
+					children: [
+						{ label: '选项三 - 1', value: 31 },
+						{ label: '选项三 - 2', value: 32 }    
+					]
+				}
+			]
+		}
+	]
+});
 
 const handleChange = (v) => {
 	type.value = v;
-	router.replace(URL.merge({
-		path: route.path.value,
+
+	router.replace({
+		path: route.path,
 		query: {
 			...route.query.value,
-			type: v
+			type: v,
+			page: current[v] || 1
 		}
-	}));
+	});
 };
 
-const loadData = async ($page, pageSize) => {
+const loadData = async (page, pageSize) => {
 	try {
 		const res = await Network.request({
 			url: 'TPL_PAGING_TABS_GET',
@@ -139,16 +145,16 @@ const loadData = async ($page, pageSize) => {
 				status: 1,
 				data: {
 					page: {
-						current: $page,
+						current: page,
 						total: 100,
 						count: pageSize * 100,
 					},
-					list: getFakeData($page, pageSize, type.value)
+					list: getFakeData(page, pageSize, type.value)
 				}
 
 			}
 		});
-		console.log(`page: ${$page}-type: ${type.value}@success`);
+		console.log(`page: ${page}-type: ${type.value}@success`);
 
 		return res;
 	} catch (e) {

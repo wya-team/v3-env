@@ -4,9 +4,9 @@
 			ref="paging"
 			:page-options="pageOptions"
 			:table-options="tableOptions"
+			:filter-options="filterOptions"
 			:load-data="loadData"
 			:disabled="disabled"
-			:filters="filters"
 			:history="true"
 			:router="true"
 			:footer="true"
@@ -60,42 +60,44 @@ const tableOptions = reactive({
 		order: 'descending'
 	}
 });
-const filters = ref([
-	{
-		type: 'input',
-		label: '关键词',
-		field: 'input',
-		placeholder: '请输入关键词进行搜索'
-	},
-	{
-		type: 'select',
-		label: '下拉选择项',
-		field: 'select',
-		dataSource: [
-			{ label: '选项一', value: 1 },
-			{ label: '选项二', value: 2 }
-		]
-	},
-	{
-		type: 'cascader',
-		label: '级联选择',
-		field: 'cascader',
-		dataSource: [
-			{ label: '选项一', value: 1 },
-			{ label: '选项二', value: 2 },
-			{ 
-				label: '选项三',
-				value: 3,
-				children: [
-					{ label: '选项三 - 1', value: 31 },
-					{ label: '选项三 - 2', value: 32 }    
-				]
-			}
-		]
-	}
-]);
+const filterOptions = reactive({
+	modules: [
+		{
+			type: 'input',
+			label: '关键词',
+			field: 'input',
+			placeholder: '请输入关键词进行搜索'
+		},
+		{
+			type: 'select',
+			label: '下拉选择项',
+			field: 'select',
+			dataSource: [
+				{ label: '选项一', value: 1 },
+				{ label: '选项二', value: 2 }
+			]
+		},
+		{
+			type: 'cascader',
+			label: '级联选择',
+			field: 'cascader',
+			dataSource: [
+				{ label: '选项一', value: 1 },
+				{ label: '选项二', value: 2 },
+				{ 
+					label: '选项三',
+					value: 3,
+					children: [
+						{ label: '选项三 - 1', value: 31 },
+						{ label: '选项三 - 2', value: 32 }    
+					]
+				}
+			]
+		}
+	]
+});
 
-const loadData = async ($page, pageSize) => {
+const loadData = async (page, pageSize) => {
 	try {
 		const res = await Network.request({
 			url: 'TPL_PAGING_BASIC_GET',
@@ -103,16 +105,16 @@ const loadData = async ($page, pageSize) => {
 				status: 1,
 				data: {
 					page: {
-						current: $page,
+						current: page,
 						total: 100,
 						count: pageSize * 100,
 					},
-					list: getFakeData($page, pageSize)
+					list: getFakeData(page, pageSize)
 				}
 
 			}
 		});
-		console.log(`page: ${$page}@success`);
+		console.log(`page: ${page}@success`);
 
 		return res;
 	} catch (e) {
