@@ -33,6 +33,24 @@ export const tplNavConfig = {
 			'left',
 			'top'
 		]
+	}, {
+		path: '/tpl/paging/basic',
+		name: 'tpl-paging-basic',
+		title: '分页',
+		components: [
+			() => import('./paging-basic/index.vue'),
+			'left',
+			'top'
+		]
+	}, {
+		path: '/tpl/paging/tabs',
+		name: 'tpl-paging-tabs',
+		title: '选项卡分页',
+		components: [
+			() => import('./paging-tabs/index.vue'),
+			'left',
+			'top'
+		]
 	}]
 };
 

@@ -1,5 +1,5 @@
 <template>
-	<set-title title="" class="v-tpl-paging-form-form" style="padding: 24px">
+	<vcc-set-title title="" class="v-tpl-paging-form-form" style="padding: 24px">
 		<!-- 表单 -->
 		<div class="g-m-b-32">
 			<h3 class="g-m-b-24">
@@ -100,7 +100,7 @@
 		<vc-button type="primary" @click="handleSubmit">
 			确定
 		</vc-button>
-	</set-title>
+	</vcc-set-title>
 </template>
 
 <script>

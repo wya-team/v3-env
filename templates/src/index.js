@@ -4,6 +4,7 @@ import "@wya/vc/lib/vc.min.css";
 import { createApp } from 'vue';
 import { createRouter } from 'vue-router';
 import * as WYA_VC from '@wya/vc';
+import WYA_VCC from '@wya/vcc';
 import { Global, Vc } from './globals';
 
 import App from './app.vue';
@@ -24,10 +25,9 @@ router.beforeEach(Hooks.beforeEach);
 router.afterEach(Hooks.afterEach);
 app.use(router);
 
-
-console.log('WYA_VC', WYA_VC);
 // VC配置
 app.use(WYA_VC, Vc.configure());
+app.use(WYA_VCC);
 
 app.mount('#app');
 
