@@ -30,7 +30,7 @@
     "@wya/sass": "^2.0.0",
     "@wya/utils": "^1.6.5",
     "@wya/vc": "^3.0.0-alpha.13",
-    "@wya/vcc": "^0.0.10",
+    "@wya/vcc": "^0.0.11",
     "echarts": "^5.1.2",
     "html2canvas": "^1.0.0",
     "photoswipe": "^4.1.3",

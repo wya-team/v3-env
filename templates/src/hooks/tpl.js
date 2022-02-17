@@ -1,4 +1,4 @@
-import Service from './service';
+import { Service } from '@wya/vcc';
 
 export const useTpl = Service.createStore({
 	key: "tplData",
