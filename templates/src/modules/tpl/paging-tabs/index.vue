@@ -25,7 +25,6 @@
 						:disabled="item.value != type" 
 						:table-options="tableOptions"
 						style="width: 100%;"
-						@sort-change="handleSortChange"
 					>
 						<vc-table-column
 							prop="id"
@@ -80,12 +79,7 @@ const tabs = ref([
 ]);
 
 const current = reactive({});
-const tableOptions = reactive({
-	defaultSort: {
-		prop: 'date',
-		order: 'descending'
-	}
-});
+const tableOptions = reactive({});
 
 const filterOptions = reactive({
 	modules: [
@@ -166,10 +160,6 @@ const loadData = async (page, pageSize) => {
 		// throw e;
 		console.log(e);
 	}
-};
-
-const handleSortChange = (e) => {
-	pagingGroup.value.reset(1);
 };
 
 </script>

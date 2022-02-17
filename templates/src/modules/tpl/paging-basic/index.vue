@@ -10,25 +10,22 @@
 			:history="true"
 			:router="true"
 			:footer="true"
-			@sort-change="handleSortChange"
 		>
-			<vc-table-item>
-				<vc-table-column
-					prop="date"
-					label="日期"
-					width="180"
-					sortable
-				/>
-				<vc-table-column
-					prop="name"
-					label="姓名"
-					width="180"
-				/>
-				<vc-table-column
-					prop="address"
-					label="地址"
-				/>
-			</vc-table-item>
+			<vc-table-column
+				prop="date"
+				label="日期"
+				width="180"
+				sortable
+			/>
+			<vc-table-column
+				prop="name"
+				label="姓名"
+				width="180"
+			/>
+			<vc-table-column
+				prop="address"
+				label="地址"
+			/>
 		</vcc-paging>
 	</vcc-set-title>
 </template>
@@ -58,12 +55,7 @@ const router = useRouter();
 const disabled = ref(false);
 const paging = ref(null);
 const pageOptions = ref();
-const tableOptions = reactive({
-	defaultSort: {
-		prop: 'date',
-		order: 'descending'
-	}
-});
+const tableOptions = reactive({});
 const filterOptions = reactive({
 	modules: [
 		{
@@ -130,9 +122,5 @@ const loadData = async (page, pageSize) => {
 		// throw e;
 		console.log(e);
 	}
-};
-
-const handleSortChange = (e) => {
-	paging.value.reset(1);
 };
 </script>
