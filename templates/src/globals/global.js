@@ -58,11 +58,9 @@ class GlobalManager extends EventStore {
 		}
 	}
 
-
 	// Vue 注册用
 	install(app, options) {
 		app.config.globalProperties.$request = Network.request;
-		app.config.globalProperties.$router = options.Router;
 		app.config.globalProperties.$global = this;
 
 		this.app = app;

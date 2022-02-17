@@ -8,9 +8,9 @@ export class Vc {
 				install(app) {
 					app.config.globalProperties.$request = Network.request;
 					app.config.globalProperties.$global = Global;
-					app.config.globalProperties.$router = Router;
 					
 					app.use(WYA_VC);
+					app.use(Router);
 				}
 			}
 		};
