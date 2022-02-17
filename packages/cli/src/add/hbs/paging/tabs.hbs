@@ -1,47 +1,71 @@
 <template>
 	<vcc-set-title title="{{title}}" class="{{className}}" style="padding: 24px">
-		<vcc-paging
-			ref="paging"
-			:page-options="pageOptions"
-			:table-options="tableOptions"
-			:filter-options="filterOptions"
-			:load-data="loadData"
-			:disabled="disabled"
+		<vcc-paging-group
+			ref="pagingGroup"
 			:history="true"
 			:router="true"
 			:footer="true"
+			:filter-options="filterOptions"
+			:load-data="loadData"
 		>
-			<vc-table-column
-				prop="date"
-				label="日期"
-				width="180"
-				sortable
-			/>
-			<vc-table-column
-				prop="name"
-				label="姓名"
-				width="180"
-			/>
-			<vc-table-column
-				prop="address"
-				label="地址"
-			/>
-		</vcc-paging>
+			<vc-tabs 
+				:model-value="type" 
+				:animated="true" 
+				type="card"
+				@click="handleChange"
+			>
+				<vc-tabs-pane 
+					v-for="(item) in tabs"
+					:key="item.value"
+					:label="item.label" 
+					:name="item.value"
+				>
+					<vcc-paging
+						v-model:current="currentPages[item.value]"
+						:disabled="item.value != type" 
+						:table-options="tableOptions"
+						style="width: 100%;"
+					>
+						<vc-table-column
+							prop="id"
+							label="ID"
+							width="180"
+							sortable
+						/>
+						<vc-table-column
+							prop="name"
+							label="姓名"
+							width="180"
+						/>
+						<vc-table-column
+							prop="status"
+							label="状态"
+						/>
+					</vcc-paging>
+				</vc-tabs-pane>
+			</vc-tabs>
+		</vcc-paging-group>
 	</vcc-set-title>
 </template>
 
 <script setup>
-import { ref, reactive, defineComponent } from 'vue';
+import { ref, reactive, getCurrentInstance } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { Network } from '@globals';
 
 const route = useRoute();
 const router = useRouter();
+const pagingGroup = ref(null);
+const type = ref(String(route?.query?.type || 1));
+const tabs = ref([
+	{ label: '标签一', value: '1' }, 
+	{ label: '标签二', value: '2' }, 
+	{ label: '标签三', value: '3' }
+]);
 
-const disabled = ref(false);
-const paging = ref(null);
-const pageOptions = ref();
+const currentPages = reactive({});
 const tableOptions = reactive({});
+
 const filterOptions = reactive({
 	modules: [
 		{
@@ -80,6 +104,20 @@ const filterOptions = reactive({
 		}
 	]
 });
+
+const handleChange = async (v) => {
+	await router.replace({
+		path: route.path,
+		query: {
+			...route.query,
+			type: v,
+			page: currentPages[v] || 1
+		}
+	});
+
+	type.value = v;
+};
+
 const loadData = async (page, pageSize) => {
 	try {
 		const res = await Network.request({
@@ -90,6 +128,7 @@ const loadData = async (page, pageSize) => {
 				...route.query
 			}
 		});
+
 		return res;
 	} catch (e) {
 		// throw e;
