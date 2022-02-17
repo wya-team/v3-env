@@ -2,10 +2,7 @@
 	<div>tpl/main</div>
 </template>
 
-<script>
+<script setup>
 import './api';
 
-export default {
-
-};
 </script>

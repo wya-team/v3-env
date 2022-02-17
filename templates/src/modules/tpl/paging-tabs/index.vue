@@ -87,7 +87,9 @@ const filterOptions = reactive({
 			type: 'input',
 			label: '关键词',
 			field: 'input',
-			placeholder: '请输入关键词进行搜索'
+			options: {
+				placeholder: '请输入关键词进行搜索'
+			}
 		},
 		{
 			type: 'select',
