@@ -181,8 +181,10 @@ module.exports = class AddManager {
 		// 	project: 'chyy',
 		// 	mobile: false,
 		// 	navigation: true,
-		// 	template: 'form',
-		// 	path: '/tpl/paging/form',
+		// 	template: 'paging',
+		// 	pagingType: 'tabs',
+		// 	pagingMode: 'table',
+		// 	path: '/tpl/paging/basic2',
 		// 	dir: '/Users/dongjiang/Documents/workspace/gitClone/work/vue-env.next/templates/src/'
 		// });
 	}

@@ -1,197 +1,103 @@
 <template>
-	{{#if isBasic}}
-	{{> paging}}
-	{{else}}
-	<vc-tabs 
-		:value="type" 
-		:animated="false"
-		type="card" 
-		style="margin-top: 20px"
-		@click="handleChange"
-	>
-		<vc-tabs-pane 
-			v-for="(item) in tabs"
-			:key="item.value"
-			:label="item.label" 
-			:name="item.value"
+	<vcc-set-title title="{{title}}" class="{{className}}" style="padding: 24px">
+		<vcc-paging
+			ref="paging"
+			:page-options="pageOptions"
+			:table-options="tableOptions"
+			:filter-options="filterOptions"
+			:load-data="loadData"
+			:disabled="disabled"
+			:history="true"
+			:router="true"
+			:footer="true"
 		>
-			{{> paging}}
-		</vc-tabs-pane>
-	</vc-tabs>
-	{{/if}}
+			<vc-table-column
+				prop="date"
+				label="日期"
+				width="180"
+				sortable
+			/>
+			<vc-table-column
+				prop="name"
+				label="姓名"
+				width="180"
+			/>
+			<vc-table-column
+				prop="address"
+				label="地址"
+			/>
+		</vcc-paging>
+	</vcc-set-title>
 </template>
 
-<script>
-import { URL } from '@utils/utils';
-import Item from './item';
+<script setup>
+import { ref, reactive, defineComponent } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { Network } from '@globals';
 
-export default {
-	name: '{{componentName}}',
-	components: {
-		'{{project}}-item': Item,
-	},
-	data() {
-		const { query } = this.$route;
-		return {
-			{{#unless isBasic}}
-			type: String(query.type || "1"), // 同tabs下的value
-			current: {},
-			tabs: [
-				{ label: '标签一', value: '1' }, 
-				{ label: '标签二', value: '2' }, 
-				{ label: '标签三', value: '3' }
-			],
-			{{/unless}}
-			{{#if isNativeMode}}
-			columns: ['Header - 1', 'Header - 2', 'Header - 3', 'Header - 4'],
-			{{/if}}
-			{{#if isExpand}}
-			tableOptions: {
-				lazy: true,
-				indent: 20,
-				expandSelectable: false,
-				rowKey: 'uid',
-				loadExpand: this.loadExpand
-			},
-			{{/if}}
-			{{#if isMultiple}}
-			selection: []
-			{{/if}}
-		};
-	},
-	computed: {
-		listInfo() {
-			return this.$store.state.{{stateName}}.listInfo;
+const route = useRoute();
+const router = useRouter();
+
+const disabled = ref(false);
+const paging = ref(null);
+const pageOptions = ref();
+const tableOptions = reactive({});
+const filterOptions = reactive({
+	modules: [
+		{
+			type: 'input',
+			label: '关键词',
+			field: 'input',
+			placeholder: '请输入关键词进行搜索'
 		},
-		{{#if isMultiple}}
-		// 1 全选 2 半选 3 未选
-		checkedStatus() {
-			{{#if isBasic}}
-			const pagingData = this.listInfo;
-			{{else}}
-			const pagingData = this.listInfo[this.type];
-			{{/if}}
-			const data = pagingData.data[this.$route.query.page || 1];
-			if (!data) return 3;
-			const temp = data.filter(row => {
-				return this.selection.findIndex(it => it.id === row.id) > -1;
-			});
-			return temp.length
-				? (temp.length === data.length ? 1 : 2)
-				: 3;
+		{
+			type: 'select',
+			label: '下拉选择项',
+			field: 'select',
+			dataSource: [
+				{ label: '选项一', value: 1 },
+				{ label: '选项二', value: 2 }
+			]
 		},
-		{{/if}}
-	},
-	methods: {
-		loadData(page, pageSize) {
-			let { query = {} } = URL.parse();
-			return this.request({
-				url: '{{mutationPrefix}}_LIST_GET',
-				type: 'GET',
-				param: {
-					...query,
-					{{#unless isBasic}}
-					type: this.type,
-					{{/unless}}
-					page,
-					pageSize
-				},
-			}).then((res) => {
-				console.log(res, 'res');
-			}).catch((error) => {
-				console.log(error, 'error');
-			});
-		},
-		{{#unless isBasic}}
-		{{#if isExpand}}
-		loadExpand(tree) {
-			return new Promise((resolve, reject) => {
-				this.$request({
-					url: '_{{mutationPrefix}}_LIST_CHILDREN_GET',
-					type: 'GET',
-					param: {},
-					loading: false
-				}).then(({ data }) => {
-					resolve(data);
-				}).catch((error) => {
-					reject();
-					console.log(error, 'error');
-				});
-			});
-		},
-		{{/if}}
-		handleChange(type) {
-			this.type = type;
-		
-			let { query = {} } = URL.parse(); // this.$route需要设置paging.sync
-			query = {
-				...query,
-				type,
-				page: this.current[type]
-			};
-			this.$router.replace(URL.merge({ path: '{{route}}', query }));
-		},
-		{{/unless}}
-		handleChangePageSize() {
-			this.$store.commit('{{mutationPrefix}}_LIST_INIT');
-		},
-		{{#if isMultiple}}
-		handleSelectionChange(selection) {
-			this.selection = selection;
-		},
-		handleCheckAll() {
-			{{#if isBasic}}
-			const tableRef = this.$refs.tableTarget;
-			{{else}}
-			const tableRef = this.$refs.tableTarget[0];
-			{{/if}}
-			this.checkedStatus === 1 ? tableRef.clearSelection() : tableRef.toggleAllSelection();
-		},
-		{{/if}}
+		{
+			type: 'cascader',
+			label: '级联选择',
+			field: 'cascader',
+			dataSource: [
+				{ label: '选项一', value: 1 },
+				{ label: '选项二', value: 2 },
+				{ 
+					label: '选项三',
+					value: 3,
+					children: [
+						{ label: '选项三 - 1', value: 31 },
+						{ label: '选项三 - 2', value: 32 }    
+					]
+				}
+			]
+		}
+	]
+});
+const loadData = async (page, pageSize) => {
+	try {
+		const res = await Network.request({
+			url: '{{mutationPrefix}}_LIST_GET',
+			param: {
+				page,
+				pageSize,
+				...route.query
+			}
+		});
+		return res;
+	} catch (e) {
+		// throw e;
+		console.log(e);
 	}
 };
 </script>
 
 <style lang="scss">
-{{#if isPieceMode}}
 .{{className}} {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	margin: 20px 0;
-	._item {
-		border: 1px solid #d4d4d4;
-		padding: 20px;
-		margin-bottom: 20px;
-		width: calc(50% - 10px);
-	}
-}
-{{else if isNativeMode}}
-.{{className}} table {
-	width: 100%;
-	thead {
-		th {
-			text-align: left;
-			height: 40px;
-			white-space: nowrap;
-			overflow: hidden;
-			background-color: #f8f8f9;
 
-		}
-	}
-	tbody {
-		background-color: #ffffff;
-		td {
-			text-align: left;
-			height: 40px;
-			white-space: nowrap;
-			overflow: hidden;
-			border: 1px solid #ccc!important
-		}
-		tr {
-			border: 1px solid red!important
-		}
-	}
 }
-{{/if}}
 </style>

@@ -77,47 +77,35 @@
 	</vcc-set-title>
 </template>
 
-<script>
+<script setup>
 import { ref, reactive } from 'vue';
 import './api';
-
-export default {
-	name: '{{componentName}}',
-	setup(props) {
-		const formRef = ref(null);
-		const company = reactive(['阿里', '有赞', '网易', '滴滴']);
-		const formValidate = reactive({
-			product_name: 'xxxxx',
-			original_img: ''
-		});
-		const ruleValidate = reactive({
-			product_name: [
-				{ 
-					required: true, 
-					message: '商品名称必须填写，最多100个字' 
-				}
-			],
-			original_img: [
-				{ 
-					required: true, 
-					message: '最少添加一张商品图片' 
-				}
-			],
-		});
-		const handleSubmit = (name) => {
-			formRef.validate().then((res) => {
-				// ..
-			}).catch((res) => {
-				console.log(res);
-			});
-		};
-		return {
-			formRef,
-			company,
-			formValidate,
-			handleSubmit
+const formRef = ref(null);
+const company = reactive(['阿里', '有赞', '网易', '滴滴']);
+const formValidate = reactive({
+	product_name: 'xxxxx',
+	original_img: ''
+});
+const ruleValidate = reactive({
+	product_name: [
+		{ 
+			required: true, 
+			message: '商品名称必须填写，最多100个字' 
 		}
-	}
+	],
+	original_img: [
+		{ 
+			required: true, 
+			message: '最少添加一张商品图片' 
+		}
+	],
+});
+const handleSubmit = (name) => {
+	formRef.validate().then((res) => {
+		// ..
+	}).catch((res) => {
+		console.log(res);
+	});
 };
 </script>
 
