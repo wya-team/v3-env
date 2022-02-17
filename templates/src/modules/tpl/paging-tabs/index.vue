@@ -124,23 +124,28 @@ const filterOptions = reactive({
 	]
 });
 
-const handleChange = (v) => {
-	type.value = v;
-
-	router.replace({
+const handleChange = async (v) => {
+	await router.replace({
 		path: route.path,
 		query: {
-			...route.query.value,
+			...route.query,
 			type: v,
 			page: current[v] || 1
 		}
 	});
+
+	type.value = v;
 };
 
 const loadData = async (page, pageSize) => {
 	try {
 		const res = await Network.request({
 			url: 'TPL_PAGING_TABS_GET',
+			param: {
+				page,
+				pageSize,
+				...route.query
+			},
 			localData: {
 				status: 1,
 				data: {

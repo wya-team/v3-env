@@ -34,6 +34,7 @@
 </template>
 <script setup>
 import { ref, reactive, defineComponent } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { Network } from '@globals';
 
 const getFakeData = (page, pageSize) => {
@@ -50,6 +51,9 @@ const getFakeData = (page, pageSize) => {
 	}
 	return fakeData;
 };
+
+const route = useRoute();
+const router = useRouter();
 
 const disabled = ref(false);
 const paging = ref(null);
@@ -101,6 +105,11 @@ const loadData = async (page, pageSize) => {
 	try {
 		const res = await Network.request({
 			url: 'TPL_PAGING_BASIC_GET',
+			param: {
+				page,
+				pageSize,
+				...route.query
+			},
 			localData: {
 				status: 1,
 				data: {
