@@ -5,7 +5,7 @@ import { createApp } from 'vue';
 import * as WYA_VC from '@wya/vc';
 import * as WYA_VCC from '@wya/vcc';
 import { Global, Network, Vc, Vcc } from './globals';
-import { Router } from './routers';
+import { Router, Routes } from './routers';
 
 import App from './app.vue';
 
@@ -13,7 +13,8 @@ const app = createApp(App);
 const options = {
 	Global,
 	Network,
-	Router
+	Router,
+	Routes
 };
 
 // 全局信息

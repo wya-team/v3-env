@@ -11,6 +11,8 @@ class GlobalManager extends EventStore {
 		this.branch = process.env.BRANCH || 'master';
 		this.forceBranch = this.branch;
 		this.app = null;
+		this.routes = null;
+		this.router = null;
 
 		this.initial();
 	}
@@ -51,18 +53,20 @@ class GlobalManager extends EventStore {
 		Storage.set(TOKEN_TAG, config);
 		window.dispatchEvent(new Event('@wya/login'));
 
-		const router = this?.app?.config?.globalProperties?.$router;
-
-		if (router) {
-			router.push('/tpl/main');
+		if (this.routes && this.router) {
+			this.routes.reset();
+			this.router.push('/');
 		}
 	}
 
 	// Vue 注册用
 	install(app, options) {
+		const { Router, Routes } = options;
 		app.config.globalProperties.$request = Network.request;
 		app.config.globalProperties.$global = this;
 
+		this.router = Router;
+		this.routes = Routes;
 		this.app = app;
 	}
 }

@@ -21,7 +21,7 @@ class RoutesManager {
 		this.navRoutes = navManage.navTreeFlatted || [];
 
 		this.router = null;
-		this.routes = this._init();
+		this.defaults = this._init();
 	}
 
 	setRouter(router) {

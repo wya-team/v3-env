@@ -6,11 +6,11 @@ import FNScrollBehavior from './scroll-behavior';
 
 // const scrollBehavior = FNScrollBehavior;
 
-export const routesManager = new CRoutesManager();
+export const Routes = new CRoutesManager();
 // 路由
 export const Router = createRouter({
 	history,
-	routes: routesManager.routes,
+	routes: Routes.defaults,
 });
 
 Router.beforeEach(Hooks.beforeEach);
