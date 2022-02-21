@@ -6,7 +6,7 @@
 			<!-- 96位所有label中最宽的长度 -->
 			<{{vcPrefix}}-form 
 				ref="formRef" 
-				:model="formValidate" 
+				:model="formData" 
 				:rules="ruleValidate" 
 				:label-width="96"
 				class="g-pd-l-56 g-m-t-21"
@@ -14,7 +14,7 @@
 			>
 				<{{vcPrefix}}-form-item label="商品名称：" prop="product_name">
 					<{{vcPrefix}}-input 
-						v-model="formValidate.product_name"
+						v-model="formData.product_name"
 						class="v-input" 
 						placeholder="请输入" 
 						style="width: 300px"
@@ -26,7 +26,7 @@
 				</{{vcPrefix}}-form-item>
 				<{{vcPrefix}}-form-item label="商品分类：" prop="my_company">
 					<{{vcPrefix}}-select 
-						v-model="formValidate.my_company"
+						v-model="formData.my_company"
 						clearable 
 						transfer
 						placeholder="请选择我方合同公司"
@@ -82,7 +82,7 @@ import { ref, reactive } from 'vue';
 import './api';
 const formRef = ref(null);
 const company = reactive(['阿里', '有赞', '网易', '滴滴']);
-const formValidate = reactive({
+const formData = reactive({
 	product_name: 'xxxxx',
 	original_img: ''
 });
