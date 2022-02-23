@@ -1,1 +1,1 @@
-export * from './tpl.js';
+export * from './services.js';
