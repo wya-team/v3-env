@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref, watch, computed, onBeforeMount } from 'vue';
+import { onMounted, onUnmounted, ref, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { Global } from '@globals/index';
 import navManage from './nav-manage';
@@ -73,7 +73,7 @@ export default {
 			Global.emit('layout-top-menu', { distance: 55 });
 			Global.emit('layout-left-menu-emit-again', { emit: true });
 		});
-		onUnmounted(() => {
+		onBeforeUnmount(() => {
 			Global.emit('layout-top-menu', { distance: 0 });
 			Global.off('layout-left-menu', setLeftDistance);
 		});
