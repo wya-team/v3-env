@@ -5,11 +5,7 @@ import Layout from '@components/layout/layout.vue';
 import Left from '@components/layout/left.vue';
 import Top from '@components/layout/top.vue';
 import { Global } from '@globals/index';
-import { history, basicRoutes, layoutRoutes, dynamicRoutes } from './routes.js';
-
-/**
- * 用于排序
- */
+import { basicRoutes, layoutRoutes, dynamicRoutes } from './routes.js';
 
 class RoutesManager {
 	constructor() {
@@ -17,21 +13,26 @@ class RoutesManager {
 		this.layoutRoutes = layoutRoutes || [];
 		this.dynamicRoutes = dynamicRoutes || [];
 		
-		navManage.update();
-		this.navRoutes = navManage.navTreeFlatted || [];
+		this.history = createWebHistory('/');
+		this.router = createRouter({
+			history: this.history,
+			routes: [],
+		});
 
-		this.router = null;
-		this.defaults = this._init();
-	}
-
-	setRouter(router) {
-		this.router = router;
+		this.clearRoutes = [];
+		this.reset();
 	}
 
 	/**
-	 * 初始化路由，如果已经登录过，则生成有权限的路由配置文件，给Router
+	 * 一开始没有登录，路由只有/login，登录之后，动态添加
 	 */
-	_init() {
+	reset() {
+		// 更新导航
+		navManage.update();
+		this.navRoutes = navManage.navTreeFlatted || [];
+
+		// 重新获得有权限的路由
+		this.clearRoutes.forEach(fn => fn());
 		let routes = cloneDeep(this.basicRoutes);
 		let children = Global.isLoggedIn() ? this.getRoutes() : this.getRoutes(this.layoutRoutes);
 		let redirect = (children[0] || {}).path || '/other/not-found';
@@ -43,34 +44,9 @@ class RoutesManager {
 			children
 		});
 
-		return routes;
-	}
-
-	/**
-	 * 一开始没有登录，路由只有/login，登录之后，动态添加
-	 */
-	reset() {
-		// 更新导航
-		navManage.update();
-		this.navRoutes = navManage.navTreeFlatted || [];
-		// 重新获得有权限的路由
-		let children = this.getRoutes() || [];
-		let redirect = (children[0] || {}).path || '/other/not-found';
-		let newRouter = createRouter({
-			history,
-			routes: this.basicRoutes,
+		this.clearRoutes = routes.map(i => {
+			return this.router.addRoute(i);
 		});
-		this.router.matcher = newRouter.matcher; // the relevant part
-		this.router.addRoutes(
-			[
-				{
-					path: '/',
-					component: Layout,
-					redirect,
-					children
-				}
-			]
-		);
 	}
 
 	getRoutes(targetRoutes) {

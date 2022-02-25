@@ -1,8 +1,6 @@
-import { createWebHistory } from 'vue-router';
 import { loginConfig } from '../modules/login';
 import { tplConfig } from '../modules/tpl';
 
-export const history = createWebHistory('/');
 export const basicRoutes = [
 	...loginConfig,
 	{
