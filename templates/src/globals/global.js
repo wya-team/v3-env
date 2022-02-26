@@ -30,6 +30,8 @@ class GlobalManager extends EventStore {
 
 		this.forceBranch = (this.branch === 'develop' && Storage.get(BRANCH_TAG)) || this.branch;
 		Network.setGlobal(this);
+
+		this.user = Storage.get(TOKEN_TAG) || {};
 	}
 
 	/**
