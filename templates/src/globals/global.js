@@ -14,6 +14,8 @@ class GlobalManager extends EventStore {
 		this.routes = null;
 		this.router = null;
 
+		this.user = {}; // TODO: 是否需要响应式
+
 		this.initial();
 	}
 
@@ -45,11 +47,14 @@ class GlobalManager extends EventStore {
 	 * 清理登录
 	 */
 	async clearLoginAuth() {
+		this.user = {};
 		Storage.remove(TOKEN_TAG);
 		window.dispatchEvent(new Event('@wya/logout'));
 	}
 
 	async createLoginAuth(config) {
+		this.user = config;
+
 		Storage.set(TOKEN_TAG, config);
 		window.dispatchEvent(new Event('@wya/login'));
 
@@ -57,6 +62,11 @@ class GlobalManager extends EventStore {
 			this.routes.reset();
 			this.router.push('/');
 		}
+	}
+
+	updateUser(config) {
+		this.user = Object.assign(this.user, config);
+		Storage.set(TOKEN_TAG, this.user);
 	}
 
 	// Vue 注册用
