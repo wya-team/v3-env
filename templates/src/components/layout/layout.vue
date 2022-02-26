@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { onUnmounted, ref, onBeforeMount } from 'vue';
+import { onUnmounted, ref, onBeforeMount, onBeforeRouteUpdate } from 'vue';
+import { VcInstance } from '@wya/vc'
 import { Global } from '@globals';
 
 export default {
@@ -47,6 +48,10 @@ export default {
 			paddingLeft.value = distance ? `${distance}px` : 0;
 			minWidth.value = 1024 - distance - marginLR;
 		};
+
+		onBeforeRouteUpdate(() => {
+			VcInstance.clear();
+		});
 
 		// lifecycle
 		onBeforeMount(() => {
