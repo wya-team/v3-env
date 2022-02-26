@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { createRouter, createWebHistory } from 'vue-router';
+import { VcInstance } from '@wya/vc';
 import navManage from '@components/layout/nav-manage';
 import Layout from '@components/layout/layout.vue';
 import Left from '@components/layout/left.vue';
@@ -27,6 +28,7 @@ class RoutesManager {
 	 * 一开始没有登录，路由只有/login，登录之后，动态添加
 	 */
 	reset() {
+		VcInstance.clear();
 		// 更新导航
 		navManage.update();
 		this.navRoutes = navManage.navTreeFlatted || [];
