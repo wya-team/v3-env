@@ -37,7 +37,7 @@ class NavManage {
 	}
 
 	canShow = (auth) => {
-		if (!Global.user) return true; // TODO: 对接权限后删除
+		if (!Global.user || !Global.user.auth) return true; // TODO: 对接权限后删除
 		if (Global.user.auth) return false;
 		if (Array.isArray(auth)) {
 			return auth.some((it) => Global.user.auth[it]);
