@@ -25,8 +25,9 @@
 </template>
 
 <script>
-import { onUnmounted, ref, onBeforeMount, onBeforeRouteUpdate } from 'vue';
+import { onUnmounted, ref, onBeforeMount } from 'vue';
 import { VcInstance } from '@wya/vc'
+import { onBeforeRouteUpdate } from 'vue-router'
 import { Global } from '@globals';
 
 export default {
