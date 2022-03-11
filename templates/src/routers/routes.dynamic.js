@@ -7,6 +7,7 @@ import Left from '@components/layout/left.vue';
 import Top from '@components/layout/top.vue';
 import { Global } from '@globals/index';
 import { basicRoutes, layoutRoutes, dynamicRoutes } from './routes.js';
+import { stringifyQuery } from './utils';
 
 class RoutesManager {
 	constructor() {
@@ -18,6 +19,8 @@ class RoutesManager {
 		this.router = createRouter({
 			history: this.history,
 			routes: [],
+			// 源码在这里会对query中特殊字符进行兑换，像空格 -> '+'
+			stringifyQuery
 		});
 
 		this.clearRoutes = [];
