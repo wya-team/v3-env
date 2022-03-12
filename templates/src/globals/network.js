@@ -75,7 +75,7 @@ class NetworkManager {
 					errorTip && errorMsg && Message.error(errorMsg);
 					break;
 				case 1:
-					successTip && successMsg && Message.info(successMsg);
+					successTip && successMsg && Message.success(successMsg);
 					break;
 				default:
 					break;
