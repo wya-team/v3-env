@@ -5,6 +5,9 @@ export class Vc {
 	static configure = (options) => {
 		const { Global, Network, Router } = options;
 		return {
+			Icon: {
+				urls: []
+			},
 			Portal: {
 				install(app) {
 					app.config.globalProperties.$request = Network.request;
