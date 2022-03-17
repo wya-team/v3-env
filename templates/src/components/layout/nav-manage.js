@@ -21,7 +21,7 @@ class NavManage {
 		return data.reduce((pre, cur) => {
 			const { auth, children, ...rest } = cur;
 			const hasChildren = children && children.length > 0;
-			const show = this.canShow(auth);
+			const show = Global.hasAuth(auth);
 			if (!show) return pre;
 			let obj = { ...rest };
 			if (hasChildren) {
@@ -35,17 +35,6 @@ class NavManage {
 			return pre;
 		}, initialData);
 	}
-
-	canShow = (auth) => {
-		if (!Global.user || !Global.user.auth) return true; // TODO: 对接权限后删除
-		if (Global.user.auth) return false;
-		if (Array.isArray(auth)) {
-			return auth.some((it) => Global.user.auth[it]);
-		} else if (typeof auth === 'boolean') {
-			return auth;
-		}
-		return Global.user.auth[auth];
-	};
 }
 
 export default new NavManage();

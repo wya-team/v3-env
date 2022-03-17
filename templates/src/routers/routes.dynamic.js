@@ -58,15 +58,7 @@ class RoutesManager {
 		let allRoutes = cloneDeep(targetRoutes || [...this.layoutRoutes, ...this.dynamicRoutes]);
 
 		// 筛选出有权限的路由
-		let authRoutes = allRoutes.filter((route) => {
-			if (!Global.user.auth) return false;
-			if (Array.isArray(route.auth)) {
-				return route.auth.some((it) => Global.user.auth[it]);
-			} else if (typeof route.auth === 'boolean') {
-				return route.auth;
-			}
-			return Global.user.auth[route.auth];
-		});
+		let authRoutes = allRoutes.filter((route) => Global.hasAuth(route.auth));
 		// navRoutes已经过滤一遍，不需要在过滤
 		if (!targetRoutes) {
 			const layoutLength = this.layoutRoutes;

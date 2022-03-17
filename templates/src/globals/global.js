@@ -35,6 +35,27 @@ class GlobalManager extends EventStore {
 	}
 
 	/**
+	 * power为权限字段
+	 */
+	hasAuth(auth) {
+		if (process.env.NODE_ENV === 'development') return true; // TODO: 添加权限
+		if (!this.user || !this.user.power) return false;
+
+		return (Array.isArray(auth) ? auth : [auth]).some((it) => {
+			if (typeof it === 'boolean') {
+				return it;
+			}
+			if (typeof it === 'number' || typeof it === 'string') {
+				return this.user.power[it];
+			}
+			if (typeof it === 'function') {
+				return it(this);
+			}
+			return false;
+		});
+	}
+
+	/**
 	 * 判断是否已经登录
 	 * 
 	 * @returns {boolean} ~
