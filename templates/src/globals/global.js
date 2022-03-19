@@ -51,6 +51,9 @@ class GlobalManager extends EventStore {
 			if (typeof it === 'function') {
 				return it(this);
 			}
+			if (typeof it === 'undefined') {
+				return true;
+			}
 			return false;
 		});
 	}

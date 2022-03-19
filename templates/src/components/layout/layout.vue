@@ -26,8 +26,9 @@
 
 <script>
 import { onUnmounted, ref, onBeforeMount } from 'vue';
-import { VcInstance } from '@wya/vc'
-import { onBeforeRouteUpdate } from 'vue-router'
+import { VcInstance } from '@wya/vc';
+import { Service } from '@wya/vcc';
+import { onBeforeRouteUpdate } from 'vue-router';
 import { Global } from '@globals';
 
 export default {
@@ -52,6 +53,7 @@ export default {
 
 		onBeforeRouteUpdate(() => {
 			VcInstance.clear();
+			Service.clear();
 		});
 
 		// lifecycle
