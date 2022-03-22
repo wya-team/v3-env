@@ -161,7 +161,7 @@ export default {
 		.__chunk-item-unactive {
 			color: var(--cbd);
 			&:hover {
-				background-color: var(--67);
+				background-color: var(--c67);
 				transition: background-color 0.2s linear;
 			}
 		}
