@@ -8,7 +8,7 @@
 				v-for="menu in topMenus"
 				:key="menu.path"
 				:to="menu.path"
-				:class="$route.path.indexOf(menu.path) === 0 ? '_menu-item-active' : '_menu-item-unactive'" 
+				:class="isActiveRoute(menu.path) ? '_menu-item-active' : '_menu-item-unactive'" 
 				class="_menu-item"
 			>
 				{{ menu.title }}
@@ -64,6 +64,13 @@ export default {
 			}, []);
 		};
 
+		const isActiveRoute = (routePath) => {
+			// 路由/a/b/c激活的条件：
+			// 1. 当前路由为 /a/b/c （完全匹配）
+			// 2. 当前路由为 /a/b/c/d （子级）
+			return new RegExp(`${routePath}(/{1}.*)?$`).test(route.path);
+		};
+
 		// lifecycle
 		onBeforeMount(() => {
 			Global.on('layout-left-menu', setLeftDistance);
@@ -81,7 +88,8 @@ export default {
 		return {
 			leftMenuWidth,
 			chunkPath,
-			topMenus
+			topMenus,
+			isActiveRoute
 		};
 	},
 };
