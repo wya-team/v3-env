@@ -78,6 +78,13 @@ export const createSession = (key) => {
 	return session;
 };
 
+export const isActiveRoute = (routePath, currentRoutePath) => {
+	// 路由/a/b/c激活的条件：
+	// 1. 当前路由为 /a/b/c （完全匹配）
+	// 2. 当前路由为 /a/b/c/d （子级）
+	return new RegExp(`${routePath}(/{1}.*)?$`).test(currentRoutePath);
+};
+
 // 方便调用
 Utils.set({
 	createSession,

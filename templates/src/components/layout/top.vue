@@ -8,7 +8,7 @@
 				v-for="menu in topMenus"
 				:key="menu.path"
 				:to="menu.path"
-				:class="isActiveRoute(menu.path) ? '_menu-item-active' : '_menu-item-unactive'" 
+				:class="isActiveRoute(menu.path, $route.path) ? '_menu-item-active' : '_menu-item-unactive'" 
 				class="_menu-item"
 			>
 				{{ menu.title }}
@@ -22,6 +22,7 @@ import { onMounted, onUnmounted, ref, watch, computed, onBeforeMount, onBeforeUn
 import { useRouter, useRoute } from 'vue-router';
 import { Global } from '@globals/index';
 import navManage from './nav-manage';
+import { isActiveRoute } from '@utils';
 
 export default {
 	name: 'tpl-layout-top',
@@ -62,13 +63,6 @@ export default {
 				}
 				return pre;
 			}, []);
-		};
-
-		const isActiveRoute = (routePath) => {
-			// 路由/a/b/c激活的条件：
-			// 1. 当前路由为 /a/b/c （完全匹配）
-			// 2. 当前路由为 /a/b/c/d （子级）
-			return new RegExp(`${routePath}(/{1}.*)?$`).test(route.path);
 		};
 
 		// lifecycle

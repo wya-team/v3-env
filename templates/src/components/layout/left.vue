@@ -40,7 +40,7 @@
 				<template v-for="menu in childMenus" :key="menu.path">
 					<router-link
 						:to="menu.path"
-						:class="$route.path.indexOf(menu.path) == 0 ? '__menu-item-active' : '__menu-item-unactive'"
+						:class="isActiveRoute(menu.path, $route.path) ? '__menu-item-active' : '__menu-item-unactive'"
 						class="__menu-item g-relative"
 					>
 						{{ menu.title }}
@@ -58,6 +58,7 @@ import { Modal } from '@wya/vc';
 import { Global } from '@globals/index';
 // import LOGO_IMG from '@assets/images/logo.png';
 import navManage from './nav-manage';
+import { isActiveRoute } from '@utils'
 
 export default {
 	name: 'tpl-layout-left',
@@ -67,9 +68,7 @@ export default {
 		// computed
 		const chunks = computed(() => navManage.navTreeData);
 		const currentChunk = computed(() => {
-			let routeArray = route.path.split('/');
-			let oneLevel = `/${routeArray[1]}`;
-			return chunks.value.filter(chunk => chunk.path === oneLevel)[0] || {};
+			return chunks.value.find(it => isActiveRoute(it.path, route.path))
 		});
 		// 获取二级导航菜单
 		const childMenus = computed(() => currentChunk.value.children || []);
@@ -120,6 +119,7 @@ export default {
 			chunks,
 			currentChunk,
 			childMenus,
+			isActiveRoute,
 			handleLogOut,
 			handleEditPwd
 		};
