@@ -1,1 +1,2 @@
-export * from './services.js';
+export * from './services';
+export * from './use-sync-data';
