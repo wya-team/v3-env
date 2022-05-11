@@ -59,23 +59,7 @@ export const initPage = {
 };
 
 export const createSession = (key) => {
-	let session = key || Utils.getUid();
-
-	if (session !== key) {
-		let { path, query } = URL.parse();
-		
-		let config = URL.merge({
-			path,
-			query: {
-				...query,
-				session
-			}
-		});
-		typeof window !== 'undefined' 
-			&& window.history.replaceState(null, '', config);
-	}
-	
-	return session;
+	throw new Error('移步使用useSessionData');
 };
 
 export const isActiveRoute = (routePath, currentRoutePath) => {
