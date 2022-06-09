@@ -49,7 +49,7 @@ module.exports = class InitManager {
 				message: 'Select branch:',
 				// 可提供分支
 				choices: [
-					'master' 
+					'main'
 				],
 				validate(val) {
 					if (val !== '') {
@@ -74,7 +74,7 @@ module.exports = class InitManager {
 				let options = {
 					owner: 'wya-team',
 					repo: 'vue-env.next',
-					ref: branch || 'master',
+					ref: branch || 'main',
 					path: 'templates',
 					dest: `${place}/${project}`
 				};
