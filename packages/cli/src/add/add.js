@@ -84,17 +84,17 @@ module.exports = (opts) => {
 			pagingFeature
 		});
 		
-		// createApp({ dir, project, path, components, template, title, pathArr, navLevel, vcPrefix });
-		// createApi({ dir, template, pathArr, pagingFeature });
+		createApp({ dir, project, path, components, template, title, pathArr, navLevel, vcPrefix });
+		createApi({ dir, template, pathArr, pagingFeature });
 
-		// // PC 端需要插入到layout的nav-config
-		// if (navLevel && !isMobile) {
-		// 	createLayout({ dir, template, pathArr });
-		// }
-		// if (hasStore) {
-		// 	// TODO:
-		// 	// createStore({ dir, template, pathArr, pagingType });
-		// }
+		// PC 端需要插入到layout的nav-config
+		if (navLevel && !isMobile) {
+			createLayout({ dir, template, pathArr });
+		}
+		if (hasStore) {
+			// TODO:
+			// createStore({ dir, template, pathArr, pagingType });
+		}
 	};
 
 	const question = {
