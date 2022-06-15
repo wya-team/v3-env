@@ -3,17 +3,22 @@
 		<div v-if="typeof topMenus === 'string'" class="_name">
 			{{ topMenus }}
 		</div>
-		<div v-else-if="(topMenus instanceof Array)" class="g-flex-ac g-fw-w">
-			<router-link 
-				v-for="menu in topMenus"
-				:key="menu.path"
-				:to="menu.path"
-				:class="isActiveRoute(menu.path, $route.path) ? '_menu-item-active' : '_menu-item-unactive'" 
-				class="_menu-item"
-			>
-				{{ menu.title }}
-			</router-link>
-		</div>
+		<template v-else-if="(topMenus instanceof Array)">
+			<div v-if="topMenus.length === 1" class="_name">
+				{{ topMenus[0].title }}
+			</div>
+			<div v-else class="g-flex-ac g-fw-w">
+				<router-link
+					v-for="menu in topMenus"
+					:key="menu.path"
+					:to="menu.path"
+					:class="isActiveRoute(menu.path, $route.path) ? '_menu-item-active' : '_menu-item-unactive'"
+					class="_menu-item"
+				>
+					{{ menu.title }}
+				</router-link>
+			</div>
+		</template>
 	</div>
 </template>
 
@@ -117,7 +122,7 @@ export default {
 		color: var(--black);
 		opacity: 0.8;
 		&:hover {
-			opacity: 1;			
+			opacity: 1;
 			will-change: opacity;
 			transition: opacity 0.2s ease-in-out;
 		}
