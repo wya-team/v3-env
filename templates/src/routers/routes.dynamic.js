@@ -1,6 +1,6 @@
-import { cloneDeep } from 'lodash';
 import { createRouter, createWebHistory } from 'vue-router';
 import { VcInstance } from '@wya/vc';
+
 import navManage from '@components/layout/nav-manage';
 import Layout from '@components/layout/layout.vue';
 import Left from '@components/layout/left.vue';
@@ -14,7 +14,7 @@ class RoutesManager {
 		this.basicRoutes = basicRoutes || {};
 		this.layoutRoutes = layoutRoutes || [];
 		this.dynamicRoutes = dynamicRoutes || [];
-		
+
 		this.history = createWebHistory('/');
 		this.router = createRouter({
 			history: this.history,
@@ -24,6 +24,7 @@ class RoutesManager {
 		});
 
 		this.clearRoutes = [];
+
 		this.reset();
 	}
 
@@ -34,89 +35,65 @@ class RoutesManager {
 		VcInstance.clear();
 		// 更新导航
 		navManage.update();
-		this.navRoutes = navManage.navTreeFlatted || [];
+		this.navRoutes = navManage.navTreeData.value;
 
 		// 重新获得有权限的路由
 		this.clearRoutes.forEach(fn => fn());
-		let routes = cloneDeep(this.basicRoutes);
-		let children = Global.isLoggedIn() ? this.getRoutes() : this.getRoutes(this.layoutRoutes);
-		let redirect = (children[0] || {}).path || '/other/not-found';
 
-		routes.push({
+		const children = Global.isLoggedIn()
+			? this.generateRoutes([...this.layoutRoutes, ...this.dynamicRoutes])
+			: this.generateRoutes(this.layoutRoutes);
+
+		const rootRoute = {
 			path: '/',
 			component: Layout,
-			redirect,
+			redirect: children[0]?.path || '/other/not-found',
 			children
-		});
+		};
 
-		this.clearRoutes = routes.map(i => {
-			return this.router.addRoute(i);
-		});
+		this.clearRoutes = [rootRoute, ...this.basicRoutes]
+			.map(route => this.router.addRoute(route));
 	}
 
-	getRoutes(targetRoutes) {
-		let allRoutes = cloneDeep(targetRoutes || [...this.layoutRoutes, ...this.dynamicRoutes]);
+	/**
+	 * 生成所有路由
+	 * @param {*} routeRecords
+	 */
+	 generateRoutes(routeRecords) {
+		const navRoutes = this.generateNavRoutes();
+		// 筛选出有权限的路由, 这里用的同一个方法
+		const routes = routeRecords.filter((route) => Global.hasAuth(route.auth));
 
-		// 筛选出有权限的路由
-		let authRoutes = allRoutes.filter((route) => Global.hasAuth(route.auth));
-		// navRoutes已经过滤一遍，不需要在过滤
-		if (!targetRoutes) {
-			const layoutLength = this.layoutRoutes;
-			authRoutes.splice(layoutLength, 0, ...this.navRoutes);
-		}
+		return [...navRoutes, ...routes].map((route) => this.rebuildRoute(route));
+	}
 
-		let temp = [];
-		let routes = authRoutes.reduce((pre, route) => {
-			/**
-			 * 路由配置中如果没有设置component or components,即代表没有页面，不返回，
-			 * 让后面的其他路由来生成对应的redirect
-			 */
-			if (!route.component && !route.components) return pre;
-			// 一、二级路由url如果页面，则不做redirect
-			if (route.path.split('/').length < 4 && !route.redirect) {
-				temp.push(route.path);
-			}
-			let redirect = this.getRedirect(route.path);
-			
-			if (redirect) {
-				redirect.forEach((path) => {
-					if (!temp.includes(path)) {
-						temp.push(path);
-						pre.push({
-							path,
-							redirect: route.path
-						});
-					}
+	/**
+	 * 生成导航关联的路由
+	 */
+	generateNavRoutes() {
+		const navRoutes = [];
+		const flatten = (routes) => {
+			routes.forEach((route) => {
+				navRoutes.push({
+					...route,
+					redirect: this.getNavRouteRedirect(route)
 				});
-			}
-
-			pre.push(this.rebuildRoute(route));
-			return pre;
-		}, []);
-
-		return routes;
+				if (route.children) {
+					flatten(route.children);
+				}
+			});
+		};
+		flatten(this.navRoutes);
+		return navRoutes;
 	}
 
-	getRedirect(path) {
-		let pathArr = path.split('/');
-		let redirect;
-		switch (pathArr.length) {
-			case 4: // 三级导航
-				redirect = [
-					`/${pathArr[1]}`,
-					`/${pathArr[1]}/${pathArr[2]}`
-				];
-				break;
-			case 3: // 二级导航
-				redirect = [
-					`/${pathArr[1]}`
-				];
-				break;
-			default: 
-				break;
-		}
-
-		return redirect;
+	/**
+	 * 解析得到单个导航路由的重定向路由
+	 * @param {*} routeRecord
+	 */
+	getNavRouteRedirect(routeRecord) {
+		// 可自定义重定向地址，默认取第一个子级路由
+		return routeRecord.redirect || routeRecord.children?.[0]?.path;
 	}
 
 	rebuildRoute(route) {
@@ -128,11 +105,11 @@ class RoutesManager {
 					title: route.title,
 					...route.meta,
 				},
-				// 不能接收false了
 				components: (() => {
-					const comps = { default: route.components[0] };
-					if (route.components.includes('left')) comps.left = Left;
-					if (route.components.includes('top')) comps.top = Top;
+					const { components } = route;
+					const comps = { default: components[0] };
+					if (components.includes('left')) comps.left = Left;
+					if (components.includes('top')) comps.top = Top;
 					return comps;
 				})()
 			};
