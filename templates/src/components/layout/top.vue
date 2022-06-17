@@ -1,9 +1,6 @@
 <template>
 	<div :style="{left: `${leftMenuWidth}px`}" class="v-layout-top">
-		<div v-if="typeof topMenus === 'string'" class="_name">
-			{{ topMenus }}
-		</div>
-		<template v-else-if="(topMenus instanceof Array)">
+		<div class="g-flex-ac g-jc-sb">
 			<div v-if="topMenus.length === 1" class="_name">
 				{{ topMenus[0].title }}
 			</div>
@@ -12,86 +9,47 @@
 					v-for="menu in topMenus"
 					:key="menu.path"
 					:to="menu.path"
-					:class="isActiveRoute(menu.path, $route.path) ? '_menu-item-active' : '_menu-item-unactive'"
+					:class="activeChain[2].path === menu.path ? '_menu-item-active' : '_menu-item-unactive'"
 					class="_menu-item"
 				>
 					{{ menu.title }}
 				</router-link>
 			</div>
-		</template>
+		</div>
 	</div>
 </template>
 
-<script>
-import { onMounted, onUnmounted, ref, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+<script setup>
+import { onMounted, onBeforeUnmount, ref, computed, onBeforeMount } from 'vue';
 import { Global } from '@globals/index';
-import navManage from './nav-manage';
-import { isActiveRoute } from '@utils';
+import { useMenus } from './hooks';
 
-export default {
-	name: 'tpl-layout-top',
-	setup(props) {
-		let leftMenuWidth = ref(0);
-		const route = useRoute();
+let leftMenuWidth = ref(0);
 
-		// computed
-		const chunkPath = computed(() => {
-			let routeArray = route.path.split('/');
-			return `/${routeArray[1]}`;
-		});
-		const topMenus = computed(() => {
-			return findTopMenu(navManage.navTreeData); // eslint-disable-line
-		});
+const { activeChain } = useMenus();
 
-		// methods
-		const setLeftDistance = ({ distance }) => {
-			leftMenuWidth.value !== distance && (leftMenuWidth.value = distance);
-		};
+const topMenus = computed(() => {
+	return activeChain.value[1]?.children || [activeChain.value[activeChain.value.length - 1]];
+});
 
-		const findTopMenu = (data) => {
-			return data.reduce((pre, cur) => {
-				const { path, children } = cur;
-				const hasChildren = children && children.length > 0;
-				if (path === chunkPath.value) { // 一级导航
-					if (hasChildren) {
-						const index = children.findIndex((it) => route.path.indexOf(it.path) === 0);
-						const secdMenus = children[index]; // 二级导航
-						if (secdMenus.children && secdMenus.children.length) {
-							pre = secdMenus.children; // 三级导航
-						} else {
-							pre = secdMenus.title;
-						}
-					} else {
-						pre = cur.title;
-					}
-				}
-				return pre;
-			}, []);
-		};
-
-		// lifecycle
-		onBeforeMount(() => {
-			Global.on('layout-left-menu', setLeftDistance);
-		});
-		onMounted(() => {
-			// 让left-menu 再次告知它自己当前的宽度
-			Global.emit('layout-top-menu', { distance: 55 });
-			Global.emit('layout-left-menu-emit-again', { emit: true });
-		});
-		onBeforeUnmount(() => {
-			Global.emit('layout-top-menu', { distance: 0 });
-			Global.off('layout-left-menu', setLeftDistance);
-		});
-
-		return {
-			leftMenuWidth,
-			chunkPath,
-			topMenus,
-			isActiveRoute
-		};
-	},
+// methods
+const setLeftDistance = ({ distance }) => {
+	leftMenuWidth.value !== distance && (leftMenuWidth.value = distance);
 };
+
+// lifecycle
+onBeforeMount(() => {
+	Global.on('layout-left-menu', setLeftDistance);
+});
+onMounted(() => {
+	// 让left-menu 再次告知它自己当前的宽度
+	Global.emit('layout-top-menu', { distance: 55 });
+	Global.emit('layout-left-menu-emit-again', { emit: true });
+});
+onBeforeUnmount(() => {
+	Global.emit('layout-top-menu', { distance: 0 });
+	Global.off('layout-left-menu', setLeftDistance);
+});
 </script>
 
 <style lang="scss">

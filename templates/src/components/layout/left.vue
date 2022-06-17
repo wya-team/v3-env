@@ -8,7 +8,7 @@
 					:arrow="false"
 					portal-class-name="c-layout-popup-options"
 				>
-					<img :src="LOGO_IMG" class="_logo">
+					<img :src="LOGO" class="_logo">
 					<template #content>
 						<div class="_line g-pointer g-flex-cc" @click="handleEditPwd">
 							修改密码
@@ -19,112 +19,110 @@
 					</template>
 				</vc-popover>
 			</div>
-			<template v-for="chunk in chunks" :key="chunk.path">
-				<router-link
-					:to="chunk.path"
-					:class="currentChunk.path === chunk.path ? '__chunk-item-active' : '__chunk-item-unactive'"
-					class="__chunk-item"
-				>
-					<div class="_item-icon">
-						<vc-icon :type="chunk.icon" class="g-m-r-5" />
-						<span>{{ chunk.title }}</span>
-					</div>
-				</router-link>
-			</template>
+			<router-link
+				v-for="chunk in visibleChunks"
+				:key="chunk.path"
+				:to="chunk.path"
+				:class="activeChain[0].path === chunk.path ? '__chunk-item-active' : '__chunk-item-unactive'"
+				class="__chunk-item"
+			>
+				<div class="_item-icon">
+					<vc-icon :type="chunk.icon" :inherit="chunk.inherit" class="g-m-r-5" />
+					<span>{{ chunk.title }}</span>
+				</div>
+			</router-link>
 		</div>
-		<div v-if="childMenus.length" class="_two-level">
+		<div v-if="showChildMenus" class="_two-level">
 			<div class="__name">
-				{{ currentChunk.title }}
+				{{ realOneLevelChunk.title }}
 			</div>
 			<div style="padding: 12px">
-				<template v-for="menu in childMenus" :key="menu.path">
-					<router-link
-						:to="menu.path"
-						:class="isActiveRoute(menu.path, $route.path) ? '__menu-item-active' : '__menu-item-unactive'"
-						class="__menu-item g-relative"
-					>
-						{{ menu.title }}
-					</router-link>
-				</template>
+				<router-link
+					v-for="menu in visibleChildMenus"
+					:key="menu.path"
+					:to="menu.path"
+					:class="activeChain[1].path === menu.path ? '__menu-item-active' : '__menu-item-unactive'"
+					class="__menu-item g-relative"
+				>
+					{{ menu.title }}
+				</router-link>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script>
+<script setup>
 import { onMounted, onUnmounted, watch, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Modal } from '@wya/vc';
-import { Global } from '@globals/index';
-// import LOGO_IMG from '@assets/images/logo.png';
+import { Global, Network } from '@globals';
+import LOGO from '@assets/image/logo.png';
 import navManage from './nav-manage';
-import { isActiveRoute } from '@utils'
+import { useMenus } from './hooks';
 
-export default {
-	name: 'tpl-layout-left',
-	setup(props, context) {
-		const route = useRoute();
+const route = useRoute();
+const router = useRouter();
 
-		// computed
-		const chunks = computed(() => navManage.navTreeData);
-		const currentChunk = computed(() => {
-			return chunks.value.find(it => isActiveRoute(it.path, route.path))
-		});
-		// 获取二级导航菜单
-		const childMenus = computed(() => currentChunk.value.children || []);
-		const emitLeftMenuWidth = () => {
-			Global.emit('layout-left-menu', { distance: childMenus.value.length ? 232 : 102 });
-		};
+const { activeChain } = useMenus();
 
-		// watch
-		watch(childMenus, (newVal, oldVal) => {
-			if (newVal.length !== oldVal.length) {
-				emitLeftMenuWidth();
-			}
-		});
+const visibleChunks = computed(() => {
+	return navManage.navTreeData.value.filter(it => !it.proxy);
+});
 
-		// methods
-		const handleLogOut = () => {
-			Modal.warning({
-				title: '确认退出登录？',
-				onOk: () => {
-					// this.$request({
-					// 	url: '_LOGIN_OUT_POST',
-					// 	type: 'POST'
-					// }).then(() => {
-					// 	Global.clearLoginAuth();
-					// });
-				},
-			});
-		};
-		const handleEditPwd = () => {
-			// ChangePwd.popup().then(() => {
-			// 	Global.clearLoginAuth();
-			// });
-		};
+// 真实模块归属关系上的一级导航模块
+const realOneLevelChunk = computed(() => {
+	return activeChain.value[1]?.shadowParent || activeChain.value[1]?.parent;
+});
 
-		// lifecycle
-		onMounted(() => {
-			emitLeftMenuWidth();
-			// 防止其他组件在其发射时还没渲染
-			Global.on('layout-left-menu-emit-again', emitLeftMenuWidth);
-		});
-		onUnmounted(() => {
-			Global.emit('layout-left-menu', { distance: 0 });
-			Global.off('layout-left-menu-emit-again', emitLeftMenuWidth);
-		});
+// 可见的二级导航菜单
+const visibleChildMenus = computed(() => {
+	const childMenus = realOneLevelChunk.value?.children || [];
+	return childMenus.filter(menu => {
+		return typeof menu.hide === 'function' ? !menu.hide() : !menu.hide;
+	});
+});
+// 是否展示二级导航菜单
+const showChildMenus = computed(() => {
+	// 当前路由没有要求隐藏二级导航菜单，且存在有效的二级导航菜单
+	return !route.meta.hiddenNavigations.includes(2) && visibleChildMenus.value.length;
+});
 
-		return {
-			LOGO_IMG: 'https://wyakc.oss-cn-hangzhou.aliyuncs.com/ykt/ykt-qtt-icon.svg',
-			chunks,
-			currentChunk,
-			childMenus,
-			isActiveRoute,
-			handleLogOut,
-			handleEditPwd
-		};
-	},
+const emitLeftMenuWidth = () => {
+	Global.emit('layout-left-menu', { distance: showChildMenus.value ? 250 : 120 });
 };
+
+// 二级导航展示状态变化时，派发宽度变化事件
+watch(showChildMenus, emitLeftMenuWidth);
+
+// methods
+const handleLogOut = () => {
+	Modal.info({
+		title: '提示',
+		content: '确定退出登录？',
+		onOk: async (e) => {
+			await Network.request({
+				url: '_COMMON_LOGIN_OUT_POST',
+			});
+			Global.clearLoginAuth();
+		}
+	});
+};
+const handleEditPwd = async () => {
+
+};
+
+// lifecycle
+onMounted(() => {
+	emitLeftMenuWidth();
+	// 防止其他组件在其发射时还没渲染
+	Global.on('layout-left-menu-emit-again', emitLeftMenuWidth);
+
+});
+onUnmounted(() => {
+	Global.emit('layout-left-menu', { distance: 0 });
+	Global.off('layout-left-menu-emit-again', emitLeftMenuWidth);
+});
+
 </script>
 
 <style lang="scss">
@@ -143,7 +141,7 @@ export default {
 	}
 	._one-level {
 		height: 100%;
-		width: 102px;
+		width: 120px;
 		background-color: var(--c444);
 		.__chunk-item {
 			height: 42px;

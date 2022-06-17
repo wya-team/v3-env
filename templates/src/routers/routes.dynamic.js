@@ -51,8 +51,7 @@ class RoutesManager {
 			children
 		};
 
-		this.clearRoutes = [rootRoute, ...this.basicRoutes]
-			.map(route => this.router.addRoute(route));
+		this.clearRoutes = [rootRoute, ...this.basicRoutes].map(route => this.router.addRoute(route));
 	}
 
 	/**
@@ -63,6 +62,14 @@ class RoutesManager {
 		const navRoutes = this.generateNavRoutes();
 		// 筛选出有权限的路由, 这里用的同一个方法
 		const routes = routeRecords.filter((route) => Global.hasAuth(route.auth));
+
+		routes.forEach(route => {
+			if (!route.meta) {
+				route.meta = {};
+			}
+			route.meta.navigation = 0;
+			route.meta.hiddenNavigations = route.meta.hiddenNavigations || [];
+		});
 
 		return [...navRoutes, ...routes].map((route) => this.rebuildRoute(route));
 	}
@@ -76,6 +83,10 @@ class RoutesManager {
 			routes.forEach((route) => {
 				navRoutes.push({
 					...route,
+					meta: {
+						...(route.meta || {}),
+						title: route.title
+					},
 					redirect: this.getNavRouteRedirect(route)
 				});
 				if (route.children) {
@@ -106,10 +117,9 @@ class RoutesManager {
 					...route.meta,
 				},
 				components: (() => {
-					const { components } = route;
-					const comps = { default: components[0] };
-					if (components.includes('left')) comps.left = Left;
-					if (components.includes('top')) comps.top = Top;
+					const comps = { default: route.components[0] };
+					if (route.components.includes('left')) comps.left = Left;
+					if (route.components.includes('top')) comps.top = Top;
 					return comps;
 				})()
 			};
