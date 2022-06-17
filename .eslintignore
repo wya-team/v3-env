@@ -1,5 +1,5 @@
 dist/**
-templates/**
+# templates/**
 packages/*/node_modules/**
 packages/*/dist/**
 **/*.css
