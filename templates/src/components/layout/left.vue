@@ -84,7 +84,7 @@ const visibleChildMenus = computed(() => {
 // 是否展示二级导航菜单
 const showChildMenus = computed(() => {
 	// 当前路由没有要求隐藏二级导航菜单，且存在有效的二级导航菜单
-	return !route.meta.hiddenNavigations.includes(2) && visibleChildMenus.value.length;
+	return !route.meta.hiddenNavigations?.includes(2) && visibleChildMenus.value.length;
 });
 
 const emitLeftMenuWidth = () => {
