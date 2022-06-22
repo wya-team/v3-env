@@ -52,6 +52,7 @@ class NavManage {
 				// 路由激活时需隐藏的导航层级，比如 hiddenNavigations = [2] 则表示隐藏二级导航
 				config.meta.hiddenNavigations = config.meta.hiddenNavigations || [];
 
+				pre.navTreeFlatted.push(config);
 				if (children && children.length > 0) {
 					if (!realModule) {
 						realModule = config;
@@ -64,8 +65,6 @@ class NavManage {
 
 					config.children = res.navTreeData;
 					pre.navTreeFlatted.push(...res.navTreeFlatted);
-				} else {
-					pre.navTreeFlatted.push(config);
 				}
 				pre.navTreeData.push(config);
 				return pre;
