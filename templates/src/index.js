@@ -28,3 +28,19 @@ app.use(WYA_VCC, Vcc.configure(options));
 app.mount('#app');
 
 window.app = app;
+
+Router.onError((error, to, form) => {
+	if (
+		process.env.NODE_ENV !== 'development'
+		&& error.message.match(/(Failed to load module script|Failed to fetch dynamically imported module)/g)
+	) {
+		location.reload(true);
+	}
+});
+window.addEventListener('unhandledrejection', (e) => {
+	if (e.reason) {
+		console.warn(`UNHANDLED PROMISE REJECTION`, e.reason);
+	}
+
+	e.preventDefault();
+});
