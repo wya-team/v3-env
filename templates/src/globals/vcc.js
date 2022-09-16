@@ -3,5 +3,5 @@ export class Vcc {
 		return {
 
 		};
-	}
+	};
 }

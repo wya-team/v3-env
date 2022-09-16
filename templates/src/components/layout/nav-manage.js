@@ -27,7 +27,7 @@ class NavManage {
 			const initialData = { navTreeData: [], navTreeFlatted: [] };
 			return modules.reduce((pre, cur) => {
 				const { auth, children, proxy, ...config } = cur;
-				if (!Global.hasAuth(auth)) return pre;
+				if (!Global.hasAuth(auth) || !config.path) return pre;
 
 				let realModule;
 				// 如果配置了同级导航代理，则 realModule 应为代理模块

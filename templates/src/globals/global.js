@@ -65,8 +65,7 @@ class GlobalManager extends EventStore {
 	 */
 	isLoggedIn() {
 		const user = Storage.get(TOKEN_TAG);
-		// return !!user; // TODO: 对接好登录后可删除
-		return true;
+		return !!user;
 	}
 
 	/**
