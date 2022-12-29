@@ -39,6 +39,18 @@ module.exports = class AddManager {
 				}
 			},
 			{
+				type: 'input',
+				name: 'title',
+				message: 'Page Title:',
+				validate(val) {
+					if (val === '') {
+						return 'Page Title is required!';
+					} else {
+						return true;
+					}
+				}
+			},
+			{
 				type: 'confirm',
 				name: 'mobile',
 				message: 'is mobile:',
@@ -180,17 +192,15 @@ module.exports = class AddManager {
 		// TODO: 检查是否存在stages和未unstages的文件
 		this.options.config
 			? this._loopMake()
-			: prompt(this._getQuesion()).then(createProcess);
-		// : createProcess({
-		// 	project: 'chyy',
-		// 	mobile: false,
-		// 	navigation: true,
-		// 	template: 'paging',
-		// 	pagingType: 'tabs',
-		// 	pagingMode: 'table',
-		// 	path: '/tpl/paging/basic2',
-		// 	dir: '/Users/dongjiang/Documents/workspace/gitClone/work/vue-env.next/templates/src/'
-		// });
+			// : prompt(this._getQuesion()).then(createProcess);
+			: createProcess({
+				project: 'qdb',
+				mobile: true,
+				template: 'scroll',
+				pagingType: 'tabs',
+				path: '/home/main/index',
+				dir: '/Users/dongjiang/Documents/workspace/wya/qdb/qdb-wap/src/'
+		  });
 	}
 };
 

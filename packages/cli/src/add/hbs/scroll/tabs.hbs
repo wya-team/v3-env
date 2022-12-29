@@ -1,0 +1,84 @@
+<template>
+	<vcc-set-title title="{{title}}" class="{{className}}" style="padding: 24px">
+		<vcm-tabs 
+			:value="type" 
+			:animated="false"
+			class="v-after-sale-next"
+			@click="handleChange"
+		>
+			<vcm-tabs-pane 
+				v-for="(item) in tabs"
+				:key="item.value"
+				:label="item.label" 
+				:name="item.value"
+			>
+				<vc-recycle-list
+					ref="paging"
+					:load-data="loadData"
+				>
+					<template #default="{ row }">
+						<div>
+							{{{{support-block-helper}}}}
+							{{ row.name }}
+							{{{{/support-block-helper}}}}
+						</div>
+					</template>
+				</vc-recycle-list>
+			</vcm-tabs-pane>
+		</vcm-tabs>
+	</vcc-set-title>
+</template>
+
+<script setup>
+import { ref, reactive, getCurrentInstance } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { Network } from '@globals';
+import './api';
+
+const route = useRoute();
+const router = useRouter();
+
+const type = ref(String(route?.query?.type || 1));
+const tabs = ref([
+	{ label: '标签一', value: '1' }, 
+	{ label: '标签二', value: '2' }, 
+	{ label: '标签三', value: '3' }
+]);
+
+const handleChange = async (v) => {
+	await router.replace({
+		path: route.path,
+		query: {
+			...route.query,
+			type: v,
+			page: currentPages[v] || 1
+		}
+	});
+
+	type.value = v;
+};
+
+const loadData = async (page, pageSize) => {
+	try {
+		const res = await Network.request({
+			url: '{{mutationPrefix}}_LIST_GET',
+			param: {
+				page,
+				pageSize,
+				...route.query
+			}
+		});
+
+		return res;
+	} catch (e) {
+		// throw e;
+		console.log(e);
+	}
+};
+</script>
+
+<style lang="scss">
+.{{className}} {
+
+}
+</style>

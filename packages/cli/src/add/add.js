@@ -12,8 +12,7 @@ const createApp = require('./hbs/app/index');
 const createApi = require('./hbs/api/index'); 
 const createLayout = require('./hbs/layout/index'); 
 const createPaging = require('./hbs/paging/index'); 
-// TODO:
-// const createScroll = require('./hbs/scroll/index'); 
+const createScroll = require('./hbs/scroll/index'); 
 
 /**
  * Handlebars 注册可以被当前环境中任意模版访问的助手代码。
@@ -68,7 +67,7 @@ module.exports = (opts) => {
 		basic: createBasic,
 		form: createForm,
 		paging: createPaging,
-		// scroll: createScroll,
+		scroll: createScroll,
 	};
 
 	generator = () => {

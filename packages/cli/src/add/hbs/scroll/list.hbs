@@ -1,0 +1,51 @@
+<template>
+	<vcc-set-title title="{{title}}" class="{{className}}" style="padding: 24px">
+		<vc-recycle-list
+			ref="paging"
+			:load-data="loadData"
+		>
+			<template #default="{ row }">
+				<div>
+					{{{{support-block-helper}}}}
+					{{ row.name }}
+					{{{{/support-block-helper}}}}
+				</div>
+			</template>
+		</vc-recycle-list>
+	</vcc-set-title>
+</template>
+
+<script setup>
+import { ref, reactive, defineComponent } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { Network } from '@globals';
+import './api';
+
+const route = useRoute();
+const router = useRouter();
+
+const paging = ref(null);
+
+const loadData = async (page, pageSize) => {
+	try {
+		const res = await Network.request({
+			url: '{{mutationPrefix}}_LIST_GET',
+			param: {
+				page,
+				pageSize,
+				...route.query
+			}
+		});
+		return res;
+	} catch (e) {
+		// throw e;
+		console.log(e);
+	}
+};
+</script>
+
+<style lang="scss">
+.{{className}} {
+
+}
+</style>
