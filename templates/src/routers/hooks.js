@@ -16,13 +16,12 @@ class HooksManager {
 			return;
 		}
 
-
 		// 非登录页，已登录/未登陆
 		logged ? next() : next('/login');
-	}
+	};
 
 	afterEach = (to, from) => {
-	}
+	};
 }
 
 export const Hooks = new HooksManager();

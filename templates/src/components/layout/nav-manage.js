@@ -27,7 +27,7 @@ class NavManage {
 			const initialData = { navTreeData: [], navTreeFlatted: [] };
 			return modules.reduce((pre, cur) => {
 				const { auth, children, proxy, ...config } = cur;
-				if (!Global.hasAuth(auth)) return pre;
+				if (!Global.hasAuth(auth) || !config.path) return pre;
 
 				let realModule;
 				// 如果配置了同级导航代理，则 realModule 应为代理模块
@@ -52,7 +52,6 @@ class NavManage {
 				// 路由激活时需隐藏的导航层级，比如 hiddenNavigations = [2] 则表示隐藏二级导航
 				config.meta.hiddenNavigations = config.meta.hiddenNavigations || [];
 
-				pre.navTreeFlatted.push(config);
 				if (children && children.length > 0) {
 					if (!realModule) {
 						realModule = config;
@@ -64,9 +63,17 @@ class NavManage {
 					navigationDepth--;
 
 					config.children = res.navTreeData;
-					pre.navTreeFlatted.push(...res.navTreeFlatted);
+					// 如果该导航存在可访问的子导航才认为该导航有权限访问
+					if (res.navTreeData.length) {
+						pre.navTreeFlatted.push(config);
+						pre.navTreeFlatted.push(...res.navTreeFlatted);
+						pre.navTreeData.push(config);
+					}
+				} else {
+					// 如果没有children，说明是最后一级（3级）导航，存在对它的访问权限就行
+					pre.navTreeFlatted.push(config);
+					pre.navTreeData.push(config);
 				}
-				pre.navTreeData.push(config);
 				return pre;
 			}, initialData);
 		};

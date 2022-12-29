@@ -2,7 +2,8 @@ module.exports = {
 	"root": true,
 	"parser": "vue-eslint-parser",
 	"parserOptions": {
-		"parser": "babel-eslint",
+		"parser": "@babel/eslint-parser",
+		"requireConfigFile": false,
 		"ecmaVersion": 2020,
 		"sourceType": "module",
 		"ecmaFeatures": {
@@ -45,15 +46,20 @@ module.exports = {
 		// vue https://github.com/vuejs/eslint-plugin-vue
 		"vue/html-indent": ["warn", "tab"],
 		"vue/max-attributes-per-line": ["warn", {
-			"singleline": 4, // 一行最多四个
+			"singleline": {
+				"max": 4
+			},
 			"multiline": {
-				"max": 1,
-				"allowFirstLine": false
+				"max": 1
 			}
 		}],
 		"vue/require-default-prop": 0, // 可以不传递props
 		"vue/component-definition-name-casing": 0,
-		"vue/name-property-casing": ["warn", "kebab-case"],
+		"vue/name-property-casing": 0,
+		"vue/multi-word-component-names": 0,
+
+		"import/no-import-module-exports": 0,
+		
 		// airbnb 
 		"comma-dangle": ["warn", {
 			"arrays": "never",
