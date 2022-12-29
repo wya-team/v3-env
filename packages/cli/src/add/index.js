@@ -47,6 +47,7 @@ module.exports = class AddManager {
 			{
 				type: 'list',
 				name: 'navigation',
+				when: (answers) => !answers.mobile,
 				message: 'is navigation route & select nav level:',
 				choices: [
 					new Separator(' = For template = '),
@@ -61,13 +62,15 @@ module.exports = class AddManager {
 				type: 'list',
 				name: 'template',
 				message: 'Select template:',
-				choices: [
-					new Separator(' = For template = '),
-					'basic',
-					'paging',
-					'scroll',
-					'form'
-				],
+				choices: (answers) => {
+					return [
+						new Separator(' = For template = '),
+						'basic',
+						'paging',
+						'scroll',
+						'form'
+					].filter((it) => (answers.mobile ? it !== 'paging' : it !== 'scroll'));
+				},
 				default: 'basic'
 			},
 			{
@@ -106,13 +109,14 @@ module.exports = class AddManager {
 					'multiple'
 				],
 			},
-			{
-				type: 'confirm',
-				name: 'store',
-				message: 'use store(vuex):',
-				when: (answers) => !(/(paging|scroll)/.test(answers.template)),
-				default: false
-			},
+			// 已经没有store了
+			// {
+			// 	type: 'confirm',
+			// 	name: 'store',
+			// 	message: 'use store(vuex):',
+			// 	when: (answers) => !(/(paging|scroll)/.test(answers.template)),
+			// 	default: false
+			// },
 			{
 				type: 'input',
 				name: 'path',
