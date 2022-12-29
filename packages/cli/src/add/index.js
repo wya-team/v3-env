@@ -192,15 +192,15 @@ module.exports = class AddManager {
 		// TODO: 检查是否存在stages和未unstages的文件
 		this.options.config
 			? this._loopMake()
-			// : prompt(this._getQuesion()).then(createProcess);
-			: createProcess({
-				project: 'qdb',
-				mobile: true,
-				template: 'scroll',
-				pagingType: 'tabs',
-				path: '/home/main/index',
-				dir: '/Users/dongjiang/Documents/workspace/wya/qdb/qdb-wap/src/'
-		  });
+			: prompt(this._getQuesion()).then(createProcess);
+		// 	: createProcess({
+		// 		project: 'qdb',
+		// 		mobile: true,
+		// 		template: 'scroll',
+		// 		pagingType: 'tabs',
+		// 		path: '/home/main/index',
+		// 		dir: '/Users/dongjiang/Documents/workspace/wya/qdb/qdb-wap/src/'
+		//   });
 	}
 };
 
