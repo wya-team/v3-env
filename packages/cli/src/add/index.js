@@ -196,9 +196,8 @@ module.exports = class AddManager {
 		// 	: createProcess({
 		// 		project: 'qdb',
 		// 		mobile: true,
-		// 		template: 'scroll',
-		// 		pagingType: 'tabs',
-		// 		path: '/home/main/index',
+		// 		template: 'basic',
+		// 		path: '/tpl/asdf',
 		// 		dir: '/Users/dongjiang/Documents/workspace/wya/qdb/qdb-wap/src/'
 		//   });
 	}
