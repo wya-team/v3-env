@@ -29,7 +29,7 @@ module.exports = (opts) => {
 		navLevel,
 		moduleName,
 		pathArr
-	});
+	}).replace(/( {4})/g, '\t');
 
 	console.log(chalk`{green app.js}: {rgb(255,131,0) ${isFileExist ? 'modified' : 'created'}}`);
 	outputFileSync(outputPath, content);
