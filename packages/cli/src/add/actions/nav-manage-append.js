@@ -13,29 +13,28 @@ module.exports = (source, opts) => {
 	const sourceAST = recast.parse(source, parserConfig);
 	const regex = new RegExp(`${moduleName}/index$`);
 	const navConfigName = `${moduleName}NavConfig`;
+	let isImported = false;
 	
 	recast.visit(sourceAST, {
 		visitImportDeclaration(path) {
-			const body = path.parent.node.body;
-			const isImported = body.some((it) => {
-				return namedTypes.ImportDeclaration.check(it) && regex.test(it.source.value);
-			});
+			isImported = regex.test(path.value.source.value);
 			if (isImported) return this.abort();
 			
-			const insertIndex = body.reduce((pre, cur, index) => {
-				if (namedTypes.ImportDeclaration.check(cur)) pre = index + 1;
-				return pre;
-			}, 0);
-			const importDeclaration = createImportDeclaration({ 
-				name: moduleName,
-				isDefault: false,
-				variableName: navConfigName,
-				importPath: `@modules/${moduleName}/index`
-			});
-			body.splice(insertIndex, 0, importDeclaration);
-			
-			this.abort(); // 终止遍历
+			this.traverse(path);
 		},
+		visitClassDeclaration(path) {
+			if (!isImported) {
+				const importDeclaration = createImportDeclaration({ 
+					name: moduleName,
+					isDefault: false,
+					variableName: navConfigName,
+					importPath: `@modules/${moduleName}/index`
+				});
+				path.insertBefore(importDeclaration);
+				this.abort(); // 终止遍历
+			} 
+			this.traverse(path);
+		}
 	});
 	recast.visit(sourceAST, {
 		visitArrayExpression(path) {

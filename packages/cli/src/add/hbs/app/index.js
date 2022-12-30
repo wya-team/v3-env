@@ -25,11 +25,12 @@ module.exports = (opts) => {
 		extra
 	});
 
+
 	const content = appAppend(appContent, routeContent, { 
 		navLevel,
 		moduleName,
 		pathArr
-	}).replace(/( {4})/g, '\t');
+	}).replace(/( {4})/g, '\t').replace(/\n{2}/g, '\n');
 
 	console.log(chalk`{green app.js}: {rgb(255,131,0) ${isFileExist ? 'modified' : 'created'}}`);
 	outputFileSync(outputPath, content);
