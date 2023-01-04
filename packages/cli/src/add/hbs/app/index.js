@@ -6,7 +6,7 @@ const routeHBS = require('./route.hbs');
 const appAppend = require('../../actions/app-append');
 
 module.exports = (opts) => {
-	const { dir, extra, path, title, pathArr, navLevel, components } = opts || {};
+	const { dir, extra, path, title, pathArr, navLevel, components, isMobile } = opts || {};
 	const [moduleName, ...childPathArr] = pathArr || [];
 	const pathName = `${pathArr.join('-')}`;
 	const childName = childPathArr.join('-');
@@ -22,7 +22,8 @@ module.exports = (opts) => {
 		childName,
 		components,
 		navLevel,
-		extra
+		extra,
+		isMobile
 	});
 
 

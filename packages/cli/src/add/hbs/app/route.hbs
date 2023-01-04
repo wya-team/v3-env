@@ -2,7 +2,11 @@ export default {
 	path: '{{path}}{{ extra }}',
 	name: '{{pathName}}',
 	title: '{{title}}',
-	{{#if components}}
+	{{#if isMobile}}
+	components: [
+		() => import('./{{childName}}/index.vue')
+	]
+	{{else if components}}
 	components: [
 		() => import('./{{childName}}/index.vue'),
 		{{#each components}}
