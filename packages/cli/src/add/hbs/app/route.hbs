@@ -3,9 +3,7 @@ export default {
 	name: '{{pathName}}',
 	title: '{{title}}',
 	{{#if isMobile}}
-	components: [
-		() => import('./{{childName}}/index.vue')
-	]
+	component: () => import('./{{childName}}/index.vue')
 	{{else if components}}
 	components: [
 		() => import('./{{childName}}/index.vue'),
