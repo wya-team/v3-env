@@ -1,5 +1,5 @@
 <template>
-	<vcc-set-title title="{{title}}" class="{{className}}" style="padding: 24px">
+	<vcc-set-title title="{{title}}" class="{{className}}">
 		<vcm-tabs 
 			:value="type" 
 			:animated="false"
@@ -14,6 +14,7 @@
 			>
 				<vc-recycle-list
 					ref="paging"
+					:disabled="type != item.value"
 					:load-data="loadData"
 				>
 					<template #default="{ row }">
