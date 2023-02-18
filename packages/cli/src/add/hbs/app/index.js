@@ -4,6 +4,7 @@ const { pathExistsSync, outputFileSync, readFileSync } = require('fs-extra');
 const appHBS = require('./app.hbs');
 const routeHBS = require('./route.hbs');
 const appAppend = require('../../actions/app-append');
+const routesAppend = require('../../actions/routes-append');
 
 module.exports = (opts) => {
 	const { dir, extra, path, title, pathArr, navLevel, components, isMobile } = opts || {};
@@ -35,4 +36,11 @@ module.exports = (opts) => {
 
 	console.log(chalk`{green app.js}: {rgb(255,131,0) ${isFileExist ? 'modified' : 'created'}}`);
 	outputFileSync(outputPath, content);
+
+	// routes content
+	console.log(chalk`{green routes.js}: {rgb(255,131,0) modified}`);
+	const outputRoutesPath = upath.normalize(`${dir}routers/routes.js`);
+	let routesContent = readFileSync(outputRoutesPath, 'utf8');
+	routesContent = routesAppend(routesContent, { moduleName });
+	outputFileSync(outputRoutesPath, routesContent);
 };
