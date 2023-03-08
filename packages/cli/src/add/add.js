@@ -13,6 +13,7 @@ const createApi = require('./hbs/api/index');
 const createLayout = require('./hbs/layout/index'); 
 const createPaging = require('./hbs/paging/index'); 
 const createScroll = require('./hbs/scroll/index'); 
+const { separator2hump } = require('./actions/utils'); 
 
 /**
  * Handlebars 注册可以被当前环境中任意模版访问的助手代码。
@@ -60,6 +61,12 @@ module.exports = (opts) => {
 		route = `${path}/main`;
 	}
 
+	const APIName = `${pathArr.join('_')}`.toUpperCase().replace(/-/g, '_');
+	if (pathArr[0].length === 1) {
+		const prefix = pathArr.shift();
+		pathArr[0] = `${prefix}-${pathArr[0]}`;
+	}
+
 	const isMobile = mobile || template === 'scroll';
 	const vcPrefix = isMobile ? 'vcm' : 'vc';
 
@@ -71,6 +78,7 @@ module.exports = (opts) => {
 	};
 
 	generator = () => {
+		const humpModuleName = separator2hump(pathArr[0]);
 		createTemplate[template]({ 
 			dir,
 			project,
@@ -80,15 +88,17 @@ module.exports = (opts) => {
 			vcPrefix,
 			pagingType,
 			pagingMode,
-			pagingFeature
+			pagingFeature,
+			humpModuleName,
+			APIName
 		});
 		
-		createApp({ dir, project, path, components, template, title, pathArr, navLevel, vcPrefix, isMobile });
-		createApi({ dir, template, pathArr, pagingFeature });
+		createApp({ dir, project, path, components, template, title, pathArr, navLevel, vcPrefix, isMobile, humpModuleName });
+		createApi({ dir, template, pathArr, pagingFeature, humpModuleName, APIName });
 
 		// PC 端需要插入到layout的nav-config
 		if (navLevel && !isMobile) {
-			createLayout({ dir, template, pathArr });
+			createLayout({ dir, template, pathArr, humpModuleName });
 		}
 		if (hasStore) {
 			// TODO:

@@ -9,10 +9,10 @@ const { createIdentifier, createImportDeclaration, getPropValue } = require('./u
  * @param {*} source 原文件内容
  */
 module.exports = (source, opts) => {
-	const { moduleName } = opts || {};
+	const { moduleName, humpModuleName } = opts || {};
 	const sourceAST = recast.parse(source, parserConfig);
 	const regex = new RegExp(`${moduleName}/index$`);
-	const navConfigName = `${moduleName}NavConfig`;
+	const navConfigName = `${humpModuleName}NavConfig`;
 	let isImported = false;
 	
 	recast.visit(sourceAST, {
@@ -25,7 +25,7 @@ module.exports = (source, opts) => {
 		visitClassDeclaration(path) {
 			if (!isImported) {
 				const importDeclaration = createImportDeclaration({ 
-					name: moduleName,
+					name: humpModuleName,
 					isDefault: false,
 					variableName: navConfigName,
 					importPath: `@modules/${moduleName}/index`

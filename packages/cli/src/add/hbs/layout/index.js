@@ -5,7 +5,7 @@ const navManageHBS = require('./nav-manage.hbs');
 const navManageAppend = require('../../actions/nav-manage-append');
 
 module.exports = (opts) => {
-	const { dir, template, pathArr } = opts || {};
+	const { dir, template, pathArr, humpModuleName } = opts || {};
 	const [moduleName, ...childPathArr] = pathArr || [];
 	const outputPath = upath.normalize(`${dir}components/layout/nav-manage.js`);
 
@@ -13,7 +13,7 @@ module.exports = (opts) => {
 
 	const navManageContent = isFileExist ? readFileSync(outputPath) : navManageHBS();
 
-	const content = navManageAppend(navManageContent, { moduleName });
+	const content = navManageAppend(navManageContent, { moduleName, humpModuleName });
 
 	console.log(chalk`{green nav-manage.js}: {rgb(255,131,0) ${isFileExist ? 'modified' : 'created'}}`);
 	outputFileSync(outputPath, content);

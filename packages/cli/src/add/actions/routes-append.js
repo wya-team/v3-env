@@ -5,10 +5,10 @@ const { parserConfig } = require('./config');
 const { createSpreadElement, createImportDeclaration } = require('./utils');
 
 module.exports = (source, opts) => {
-	const { moduleName } = opts || {};
+	const { moduleName, humpModuleName } = opts || {};
 	const sourceAST = recast.parse(source, parserConfig);
 	const regex = new RegExp(`../modules/${moduleName}$`);
-	const configName = `${moduleName}Config`;
+	const configName = `${humpModuleName}Config`;
 	let isImported = false;
 	
 	recast.visit(sourceAST, {
@@ -17,7 +17,7 @@ module.exports = (source, opts) => {
 			if (isImported) return this.abort();
 
 			const importDeclaration = createImportDeclaration({ 
-				name: moduleName,
+				name: humpModuleName,
 				isDefault: false,
 				variableName: configName,
 				importPath: `../modules/${moduleName}`

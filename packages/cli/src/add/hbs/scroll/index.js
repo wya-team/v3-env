@@ -6,7 +6,7 @@ const listHBS = require('./list.hbs');
 const tabsHBS = require('./tabs.hbs');
 
 module.exports = (opts) => {
-	const { dir, project, title, route, pathArr, pagingType, pagingMode } = opts || {};
+	const { dir, project, title, route, pathArr, pagingType, pagingMode, APIName, humpModuleName } = opts || {};
 	const [moduleName, ...childPathArr] = pathArr || [];
 	const pathName = `${pathArr.join('-')}`;
 	const childName = childPathArr.join('-');
@@ -15,7 +15,6 @@ module.exports = (opts) => {
 
 	const outputListPath = upath.normalize(`${dir}modules/${moduleName}/${childName}/index.vue`);
 	
-	const mutationPrefix = `${pathArr.join('_')}`.toUpperCase();
 	const extra = childPathArr.map(item => `${item[0].toUpperCase()}${item.slice(1)}`).join('');
 	const stateName = `${moduleName}${extra}`;
 
@@ -26,7 +25,7 @@ module.exports = (opts) => {
 		moduleName,
 		childName,
 		componentName: `${project}-${pathName}-table`,
-		mutationPrefix,
+		APIName,
 		stateName,
 		className: `v-${pathName}-list`,
 		pagingMode,

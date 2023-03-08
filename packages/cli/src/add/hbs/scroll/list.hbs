@@ -29,7 +29,7 @@ const paging = ref(null);
 const loadData = async (page, pageSize) => {
 	try {
 		const res = await Network.request({
-			url: '{{mutationPrefix}}_LIST_GET',
+			url: '{{APIName}}_LIST_GET',
 			param: {
 				page,
 				pageSize,

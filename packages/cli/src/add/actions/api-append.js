@@ -23,14 +23,14 @@ module.exports = (source, opts) => {
 	recast.visit(sourceAST, {
 		visitObjectExpression(path) {
 			const node = path.node;
-			let key = `${APIName.toUpperCase()}_GET`;
+			let key = `${APIName}_GET`;
 			let value = '';
 			if (['paging', 'scroll'].includes(template)) {
-				key = `${APIName.toUpperCase()}_LIST_GET`;
+				key = `${APIName}_LIST_GET`;
 				value = '/test';
 			}
 			if (template === 'paging' && pagingFeature.includes('expand')) {
-				key = `_${APIName.toUpperCase()}_CHILDREN_GET`;
+				key = `_${APIName}_CHILDREN_GET`;
 				value = '/test';
 			}
 			if (API_KEY_ARRAY.includes(key)) return this.abort(); // 终止遍历

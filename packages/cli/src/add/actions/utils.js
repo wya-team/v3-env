@@ -67,6 +67,15 @@ const getPropValue = (properties, keyName) => properties.find((it) => it.key.nam
  */
 const getSpreadElement = (properties, keyName) => properties.find((it) => it.argument.name === keyName);
 
+const separator2hump = (value) => {
+	return value.split('-').map((it, index) => {
+		if (index > 0) {
+			const [first, ...rest] = it;
+			return first.toUpperCase() + rest.join('');
+		}
+		return it;
+	}).join('');
+};
 module.exports = {
 	createStringProp,
 	createIdentifierProp,
@@ -76,5 +85,6 @@ module.exports = {
 	createImportDeclaration,
 	createIdentifier,
 	getPropValue,
-	getSpreadElement
+	getSpreadElement,
+	separator2hump
 };

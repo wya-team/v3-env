@@ -6,11 +6,10 @@ const apiAppend = require('../../actions/api-append');
 
 
 module.exports = (opts) => {
-	const { dir, template, pagingFeature, pathArr } = opts || {};
+	const { dir, template, pagingFeature, pathArr, APIName } = opts || {};
 	const [moduleName, ...childPathArr] = pathArr || [];
 	const childName = childPathArr.join('-');
 	const outputPath = upath.normalize(`${dir}modules/${moduleName}/${childName}/api.js`);
-	const APIName = `${pathArr.join('_')}`;
 	
 	const isFileExist = pathExistsSync(outputPath);
 	let apiContent = isFileExist ? readFileSync(outputPath, 'utf8') : apiHBS();	

@@ -7,15 +7,15 @@ const appAppend = require('../../actions/app-append');
 const routesAppend = require('../../actions/routes-append');
 
 module.exports = (opts) => {
-	const { dir, extra, path, title, pathArr, navLevel, components, isMobile } = opts || {};
+	const { dir, extra, path, title, pathArr, navLevel, components, isMobile, humpModuleName } = opts || {};
 	const [moduleName, ...childPathArr] = pathArr || [];
 	const pathName = `${pathArr.join('-')}`;
 	const childName = childPathArr.join('-');
 	const outputPath = upath.normalize(`${dir}modules/${moduleName}/index.js`);
-	
+
 	const isFileExist = pathExistsSync(outputPath);
 
-	let appContent = isFileExist ? readFileSync(outputPath, 'utf8') : appHBS({ title, moduleName });
+	let appContent = isFileExist ? readFileSync(outputPath, 'utf8') : appHBS({ title, moduleName, humpModuleName });
 	routeContent = routeHBS({ 
 		path, 
 		title,
@@ -31,6 +31,7 @@ module.exports = (opts) => {
 	const content = appAppend(appContent, routeContent, { 
 		navLevel,
 		moduleName,
+		humpModuleName,
 		pathArr
 	}).replace(/( {4})/g, '\t').replace(/\n{2}/g, '\n');
 
@@ -41,6 +42,6 @@ module.exports = (opts) => {
 	console.log(chalk`{green routes.js}: {rgb(255,131,0) modified}`);
 	const outputRoutesPath = upath.normalize(`${dir}routers/routes.js`);
 	let routesContent = readFileSync(outputRoutesPath, 'utf8');
-	routesContent = routesAppend(routesContent, { moduleName });
+	routesContent = routesAppend(routesContent, { moduleName, humpModuleName });
 	outputFileSync(outputRoutesPath, routesContent);
 };

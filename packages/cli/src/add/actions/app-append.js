@@ -38,11 +38,11 @@ const getSecondNav = (children, route) => {
  * @param {*} fragment 插入的代码片段
  */
 module.exports = (source, fragment, opts) => {
-	const { navLevel, moduleName } = opts || {};
+	const { navLevel, moduleName, humpModuleName } = opts || {};
 	const sourceAST = recast.parse(source, parserConfig);
 	const fragmentAST = recast.parse(fragment, parserConfig);
-	const normalVarName = `${moduleName}Config`;
-	const navVarName = `${moduleName}NavConfig`;
+	const normalVarName = `${humpModuleName}Config`;
+	const navVarName = `${humpModuleName}NavConfig`;
 	const fragmentObjExpression = fragmentAST.program.body[0].declaration;
 	recast.visit(sourceAST, {
 		visitVariableDeclarator(path) {
